@@ -20,7 +20,26 @@ buttonAdd.addEventListener('click', function (evt) {
 // место, где должны быть карточки
 const placesList = document.querySelector('.places__list');
 
-// функция для ОДНОЙ карточки 
+// находим шаблон
+const cardTemplate = document.querySelector('#card-template');
+
+// перебираем ВЕСЬ массив
+initialCards.forEach(function (initialCards) {
+  // клонируем содержимое шаблона
+  const cardItem = cardTemplate.content.cloneNode(true);
+  // Заполняем данные
+  const imageCard = cardItem.querySelector('.card__image');
+  const titleCard = cardItem.querySelector('.card__title');
+ // меняем данные
+  imageCard.src = initialCards.link; 
+  titleCard.textContent = initialCards.name; 
+
+  // Добавляем карточку в общий список
+  placesList.appendChild(cardItem);
+  });
+
+
+/* // функция для ОДНОЙ карточки 
 function uploadingOneCard (initialCard) {
 
   const li = document.createElement('li');
@@ -41,7 +60,7 @@ function uploadingOneCard (initialCard) {
 // функция для вывода карточек
 function appendCards (initialCard, placesList) {
   placesList.append(initialCard);
-};
+}; 
 
 // функция для КАРТОЧЕК и КУДА
 function uploadingCards (initialCards, placesList) {
@@ -52,4 +71,5 @@ function uploadingCards (initialCards, placesList) {
     appendCards(card, placesList);
   });
 };
-uploadingCards(initialCards, placesList);
+uploadingCards(initialCards, placesList); 
+ */
