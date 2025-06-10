@@ -1,6 +1,41 @@
-const numbers = [2, 3, 5];
+import './index.css';
 
-// Стрелочная функция. Не запнётся ли на ней Internet Explorer?
-const doubledNumbers = numbers.map(number => number * 2);
+// место, куда эти карточки класть
+const placesList = document.querySelector(".places__list");
 
-console.log(doubledNumbers); // 4, 6, 10
+// находим сам шаблон
+const cardTemplate = document.querySelector("#card-template");
+
+// функция для удаления карточки
+function deleteCard(evt) {
+  const cardDelete = evt.target.closest(".card");
+  if (cardDelete) {
+    cardDelete.remove();
+  }
+}
+
+// создаем функцию для одной карточки
+function createCard(initialCards, deleteCard) {
+  // создаем одну карточку и клонируем ее
+  const initialCard = cardTemplate.content.cloneNode(true);
+
+  // находим данные и меняем
+  const imageCard = initialCard.querySelector(".card__image");
+  const titleCard = initialCard.querySelector(".card__title");
+  imageCard.src = initialCards.link;
+  imageCard.alt = initialCards.name;
+  titleCard.textContent = initialCards.name;
+
+  const deleteButton = initialCard.querySelector(".card__delete-button");
+  deleteButton.addEventListener("click", deleteCard);
+
+
+  // возвращаем созданную одну карточку
+  return initialCard;
+}
+
+// перебираем весь массив и выводим все карточки
+initialCards.forEach(card => {
+  const cardElement = createCard(card, deleteCard);
+  placesList.append(cardElement);
+});
