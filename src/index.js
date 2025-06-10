@@ -1,4 +1,5 @@
 import './index.css';
+import initialCards from './cards';
 
 // место, куда эти карточки класть
 const placesList = document.querySelector(".places__list");
