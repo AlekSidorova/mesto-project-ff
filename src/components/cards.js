@@ -1,5 +1,6 @@
-import { openPopup } from "./modal"
-export { openPopupImage, initialCards };
+import { openPopup } from "./modal";
+export { openPopupImage, initialCards, deleteCard };
+
 
 const initialCards = [
     {
@@ -28,10 +29,16 @@ const initialCards = [
     }
 ];
 
-// находим попап изображения
 const popupImage = document.querySelector('.popup__image');
-// и надпись к нему
 const popupCaption = document.querySelector('.popup__caption');
+
+// функция для удаления карточки
+function deleteCard(evt) {
+  const cardDelete = evt.target.closest(".card");
+  if (cardDelete) {
+    cardDelete.remove();
+  };
+};
 
 function openPopupImage(imageSrc, caption) {
   popupImage.src = imageSrc; // src для изображения
@@ -41,4 +48,5 @@ function openPopupImage(imageSrc, caption) {
   const imagePopup = document.querySelector('.popup_type_image');
   openPopup(imagePopup); // открываем попап с изображением
 };
+
 

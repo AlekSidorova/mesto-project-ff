@@ -1,27 +1,17 @@
 import "./index.css";
-import { initialCards, openPopupImage } from "./components/cards.js";
+import { initialCards, openPopupImage, deleteCard } from "./components/cards.js";
 
 
-// место, куда эти карточки класть
 const placesList = document.querySelector(".places__list");
-
-// находим сам шаблон
 const cardTemplate = document.querySelector("#card-template");
 
-// функция для удаления карточки
-function deleteCard(evt) {
-  const cardDelete = evt.target.closest(".card");
-  if (cardDelete) {
-    cardDelete.remove();
-  }
-}
 
 // создаем функцию для одной карточки
 function createCard(initialCards, deleteCard) {
   // создаем одну карточку и клонируем ее
   const initialCard = cardTemplate.content.cloneNode(true);
+  const likeButton = cardTemplate.querySelector('.card__like-button');
 
-  // находим данные и меняем
   const imageCard = initialCard.querySelector(".card__image");
   const titleCard = initialCard.querySelector(".card__title");
   imageCard.src = initialCards.link;
