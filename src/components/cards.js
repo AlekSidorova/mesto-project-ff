@@ -1,3 +1,6 @@
+import { openPopup } from "./modal"
+export { openPopupImage, initialCards };
+
 const initialCards = [
     {
       name: "Архыз",
@@ -25,4 +28,17 @@ const initialCards = [
     }
 ];
 
-export default initialCards;
+// находим попап изображения
+const popupImage = document.querySelector('.popup__image');
+// и надпись к нему
+const popupCaption = document.querySelector('.popup__caption');
+
+function openPopupImage(imageSrc, caption) {
+  popupImage.src = imageSrc; // src для изображения
+  popupCaption.textContent = caption; // подпись
+
+  // попап открытия изображений
+  const imagePopup = document.querySelector('.popup_type_image');
+  openPopup(imagePopup); // открываем попап с изображением
+};
+
