@@ -1,4 +1,5 @@
-import { openPopup } from "./modal";
+import { openPopup, closePopup } from "./modal";
+import { placesList, createCard } from "../index";
 export { openPopupImage, initialCards, deleteCard };
 
 
@@ -32,12 +33,14 @@ const initialCards = [
 const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
 
+const formElementAdd = document.querySelector('form[name="new-place"]'); // сама форма 
+const nameInput = formElementAdd.querySelector('input[name="place-name"]'); // "Название"
+const linkInput = formElementAdd.querySelector('input[name="link"]'); // "Ссылка на картинку"
+
 // функция для удаления карточки
 function deleteCard(evt) {
   const cardDelete = evt.target.closest(".card");
-  if (cardDelete) {
     cardDelete.remove();
-  };
 };
 
 function openPopupImage(imageSrc, caption) {
@@ -50,3 +53,20 @@ function openPopupImage(imageSrc, caption) {
 };
 
 
+// новая карточка
+formElementAdd.addEventListener('submit', (evt) => {
+    evt.preventDefault(); 
+
+    // берем значения из полей
+    const initialCards = {
+        name: nameInput.value, 
+        link: linkInput.value 
+    };
+
+    // создаем карточку и добавляем её 
+    const newCardElement = createCard(initialCards, deleteCard);
+    placesList.prepend(newCardElement); 
+  
+    closePopup(document.querySelector('.popup_type_new-card'));
+    formElementAdd.reset(); // очищаем поля 
+});

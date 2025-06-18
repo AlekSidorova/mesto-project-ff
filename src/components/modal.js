@@ -1,4 +1,4 @@
-export { openPopup };
+export { openPopup, closePopup };
 
 const openEditPopupButton = document.querySelector(".profile__edit-button");
 const openAddPopupButton = document.querySelector(".profile__add-button");
@@ -13,8 +13,6 @@ const descriptionInput = formElementEdit.querySelector('input[name="description"
 
 const profileName = document.querySelector(".profile__title"); // Элемент для имени профиля
 const profileDescription = document.querySelector(".profile__description"); // Элемент для занятия
-
-const formElementAdd = document.querySelector('form[name="new-place"]');
 
 
 // функция для открытия попапа

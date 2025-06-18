@@ -1,5 +1,6 @@
 import "./index.css";
 import { initialCards, openPopupImage, deleteCard } from "./components/cards.js";
+export { placesList, createCard };
 
 
 const placesList = document.querySelector(".places__list");
@@ -10,10 +11,10 @@ const cardTemplate = document.querySelector("#card-template");
 function createCard(initialCards, deleteCard) {
   // создаем одну карточку и клонируем ее
   const initialCard = cardTemplate.content.cloneNode(true);
-  const likeButton = cardTemplate.querySelector('.card__like-button');
 
   const imageCard = initialCard.querySelector(".card__image");
   const titleCard = initialCard.querySelector(".card__title");
+
   imageCard.src = initialCards.link;
   imageCard.alt = initialCards.name;
   titleCard.textContent = initialCards.name;
