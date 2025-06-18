@@ -18,14 +18,12 @@ const profileDescription = document.querySelector(".profile__description"); // �
 // функция для открытия попапа
 function openPopup(popup) {
   popup.classList.add("popup_is-opened");
-  popup.classList.add("popup_is-animated");
 
   document.addEventListener("keydown", buttonEsc);
 }
 // функция для закрытия попапа
 function closePopup(popup) {
   popup.classList.remove("popup_is-opened");
-  popup.classList.remove("popup_is-animated");
 
   document.removeEventListener("keydown", buttonEsc); // закрытие с помощью Esc
 }
