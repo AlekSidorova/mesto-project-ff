@@ -1,11 +1,11 @@
-export { openPopup, closePopup };
+export { openPopup, closePopup, openPopupImage };
+
 
 const openEditPopupButton = document.querySelector(".profile__edit-button");
-const openAddPopupButton = document.querySelector(".profile__add-button");
+
 const closeButtons = document.querySelectorAll(".popup__close");
 
 const editPopup = document.querySelector(".popup_type_edit");
-const addPopup = document.querySelector(".popup_type_new-card");
 
 const formElementEdit = document.querySelector('form[name="edit-profile"]');
 const nameInput = formElementEdit.querySelector('input[name="name"]');
@@ -18,15 +18,15 @@ const profileDescription = document.querySelector(".profile__description"); // �
 // функция для открытия попапа
 function openPopup(popup) {
   popup.classList.add("popup_is-opened");
-
   document.addEventListener("keydown", buttonEsc);
-}
+};
+
 // функция для закрытия попапа
 function closePopup(popup) {
   popup.classList.remove("popup_is-opened");
-
   document.removeEventListener("keydown", buttonEsc); // закрытие с помощью Esc
-}
+};
+
 
 // Открытие попапа редактирования профиля
 openEditPopupButton.addEventListener("click", () => {
@@ -35,23 +35,31 @@ openEditPopupButton.addEventListener("click", () => {
   openPopup(editPopup);
 });
 
+// открытие попапа с изображением
+function openPopupImage(imageSrc, caption) {
+  const popupImage = document.querySelector(".popup__image");
+  const popupCaption = document.querySelector(".popup__caption");
+
+  popupImage.src = imageSrc; // src для изображения
+  popupCaption.textContent = caption; // подпись
+
+  const imagePopup = document.querySelector(".popup_type_image");
+  openPopup(imagePopup); 
+};
+
+
 // Обработчик «отправки» формы
 function handleFormSubmit(evt) {
   evt.preventDefault(); // Отменяем стандартное поведение формы
 
-  profileName.textContent = nameInput.value; 
-  profileDescription.textContent = descriptionInput.value; 
+  profileName.textContent = nameInput.value;
+  profileDescription.textContent = descriptionInput.value;
 
   // Закрываем попап
   closePopup(editPopup);
 }
-
 formElementEdit.addEventListener("submit", handleFormSubmit);
 
-// Открытие попапа добавления новой карточки
-openAddPopupButton.addEventListener("click", () => {
-  openPopup(addPopup);
-});
 
 // Закрытие попапов по кнопкам закрытия
 closeButtons.forEach((button) => {
@@ -78,3 +86,4 @@ function buttonEsc(evt) {
     };
   };
 };
+
