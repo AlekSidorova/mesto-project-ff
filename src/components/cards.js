@@ -1,69 +1,71 @@
-import { initialCards } from "./image";
-import { closePopup, openPopupImage } from "./modal";
-import { placesList } from "../index";
-
-export { createCard, openPopupImage, initialCards, deleteCard, likeCard };
+export { initialCards, createCard, deleteCard, likeCard };
 
 
-const formElementAdd = document.querySelector('form[name="new-place"]'); // сама форма
+const initialCards = [
+  {
+    name: "Архыз",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
+  },
+  {
+    name: "Челябинская область",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
+  },
+  {
+    name: "Иваново",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
+  },
+  {
+    name: "Камчатка",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
+  },
+  {
+    name: "Холмогорский район",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
+  },
+  {
+    name: "Байкал",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
+  },
+];
+
 
 // создаем функцию для одной карточки
-function createCard(initialCards, deleteCard, likeCard) {
+function createCard(initialCard, deleteCard, likeCard, openPopupImage) { 
   // создаем одну карточку и клонируем ее
   const cardTemplate = document.querySelector("#card-template");
-  const initialCard = cardTemplate.content.cloneNode(true);
+  const elementCard = cardTemplate.content.querySelector(".card").cloneNode(true); 
 
-  const imageCard = initialCard.querySelector(".card__image");
-  const titleCard = initialCard.querySelector(".card__title");
+  const imageCard = elementCard.querySelector(".card__image");
+  const titleCard = elementCard.querySelector(".card__title");
 
-  imageCard.src = initialCards.link;
-  imageCard.alt = initialCards.name;
-  titleCard.textContent = initialCards.name;
+  imageCard.src = initialCard.link; 
+  imageCard.alt = initialCard.name; 
+  titleCard.textContent = initialCard.name; 
 
-  const likeButton = initialCard.querySelector(".card__like-button");
-  likeButton.addEventListener("click", likeCard); // Обработчик лайка
+  const likeButton = elementCard.querySelector(".card__like-button");
+  likeButton.addEventListener("click", likeCard); 
 
-  const deleteButton = initialCard.querySelector(".card__delete-button");
+  const deleteButton = elementCard.querySelector(".card__delete-button"); 
   deleteButton.addEventListener("click", deleteCard);
-
-  // обработчик события для открытия попапа с изображением
+  
+  // Обработчик события для открытия попапа с изображением
   imageCard.addEventListener("click", () =>
-    openPopupImage(imageCard.src, titleCard.textContent)
+    openPopupImage(imageCard.src, imageCard.alt, titleCard.textContent)
   );
 
-  // возвращаем созданную одну карточку
-  return initialCard;
-}
+  return elementCard; 
+};
 
 // функция для удаления карточки
 function deleteCard(evt) {
   const cardDelete = evt.target.closest(".card");
   cardDelete.remove();
-}
+};
 
 // Функция для лайка карточки
 function likeCard(evt) {
   const cardLike = evt.target;
   cardLike.classList.toggle("card__like-button_is-active");
-}
+};
 
-// новая карточка
-formElementAdd.addEventListener("submit", (evt) => {
-  const nameInput = formElementAdd.querySelector('input[name="place-name"]'); // "Название"
-  const linkInput = formElementAdd.querySelector('input[name="link"]'); // "Ссылка на картинку"
 
-  evt.preventDefault();
-
-  // берем значения из полей
-  const initialCards = {
-    name: nameInput.value,
-    link: linkInput.value,
-  };
-
-  // создаем карточку и добавляем её
-  const newCardElement = createCard(initialCards, deleteCard, likeCard);
-  placesList.prepend(newCardElement);
-
-  closePopup(document.querySelector(".popup_type_new-card"));
-  formElementAdd.reset(); // очищаем поля
-});

@@ -1,18 +1,4 @@
-export { openPopup, closePopup, openPopupImage };
-
-
-const openEditPopupButton = document.querySelector(".profile__edit-button");
-
-const closeButtons = document.querySelectorAll(".popup__close");
-
-const editPopup = document.querySelector(".popup_type_edit");
-
-const formElementEdit = document.querySelector('form[name="edit-profile"]');
-const nameInput = formElementEdit.querySelector('input[name="name"]');
-const descriptionInput = formElementEdit.querySelector('input[name="description"]');
-
-const profileName = document.querySelector(".profile__title"); // Элемент для имени профиля
-const profileDescription = document.querySelector(".profile__description"); // Элемент для занятия
+export { openPopup, closePopup, handleFormSubmit };
 
 
 // функция для открытия попапа
@@ -27,29 +13,8 @@ function closePopup(popup) {
   document.removeEventListener("keydown", buttonEsc); // закрытие с помощью Esc
 };
 
-
-// Открытие попапа редактирования профиля
-openEditPopupButton.addEventListener("click", () => {
-  nameInput.value = profileName.textContent; // заполняем поле "Имя"
-  descriptionInput.value = profileDescription.textContent; // заполняем поле "Занятие"
-  openPopup(editPopup);
-});
-
-// открытие попапа с изображением
-function openPopupImage(imageSrc, caption) {
-  const popupImage = document.querySelector(".popup__image");
-  const popupCaption = document.querySelector(".popup__caption");
-
-  popupImage.src = imageSrc; // src для изображения
-  popupCaption.textContent = caption; // подпись
-
-  const imagePopup = document.querySelector(".popup_type_image");
-  openPopup(imagePopup); 
-};
-
-
 // Обработчик «отправки» формы
-function handleFormSubmit(evt) {
+function handleFormSubmit(evt, profileName, profileDescription, nameInput, descriptionInput, editPopup) {
   evt.preventDefault(); // Отменяем стандартное поведение формы
 
   profileName.textContent = nameInput.value;
@@ -58,10 +23,9 @@ function handleFormSubmit(evt) {
   // Закрываем попап
   closePopup(editPopup);
 }
-formElementEdit.addEventListener("submit", handleFormSubmit);
-
 
 // Закрытие попапов по кнопкам закрытия
+const closeButtons = document.querySelectorAll(".popup__close");
 closeButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const popup = button.closest(".popup");
@@ -86,4 +50,6 @@ function buttonEsc(evt) {
     };
   };
 };
+
+
 

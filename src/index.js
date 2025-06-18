@@ -1,22 +1,87 @@
 import "./index.css";
-import { initialCards } from "./components/image.js";
-import { openPopup } from "./components/modal.js";
-import { createCard, deleteCard, likeCard } from "./components/cards.js";
 
-export { placesList };
-
+import {
+  initialCards,
+  createCard,
+  deleteCard,
+  likeCard,} from "./components/cards.js";
+import { openPopup, closePopup, handleFormSubmit } from "./components/modal.js";
 
 const placesList = document.querySelector(".places__list");
+
 const openAddPopupButton = document.querySelector(".profile__add-button");
+const openEditPopupButton = document.querySelector(".profile__edit-button");
+
 const addPopup = document.querySelector(".popup_type_new-card");
+const editPopup = document.querySelector(".popup_type_edit");
+
+const imagePopup = document.querySelector(".popup_type_image");
+const popupImage = document.querySelector(".popup__image");
+const popupCaption = document.querySelector(".popup__caption");
+
+const formElementEdit = document.querySelector('form[name="edit-profile"]');
+const nameInput = formElementEdit.querySelector('input[name="name"]');
+const descriptionInput = formElementEdit.querySelector('input[name="description"]');
+const profileName = document.querySelector(".profile__title"); // Элемент для имени профиля
+const profileDescription = document.querySelector(".profile__description"); // Элемент для занятия
+
+const formElementAdd = document.querySelector('form[name="new-place"]'); // сама форма
+const placeName = formElementAdd.querySelector('input[name="place-name"]'); // "Название"
+const linkInput = formElementAdd.querySelector('input[name="link"]'); // "Ссылка на картинку"
+
+// открытие попапа с изображением
+function openPopupImage(imageSrc, imageAlt, caption) {
+  popupImage.src = imageSrc; // src для изображения
+  popupImage.alt = imageAlt; // alt
+  popupCaption.textContent = caption; // подпись
+
+  openPopup(imagePopup);
+};
+
 
 // перебираем весь массив и выводим все карточки
 initialCards.forEach((card) => {
-  const cardElement = createCard(card, deleteCard, likeCard);
+  const cardElement = createCard(card, deleteCard, likeCard, openPopupImage);
   placesList.append(cardElement);
 });
 
 // Открытие попапа добавления новой карточки
 openAddPopupButton.addEventListener("click", () => {
   openPopup(addPopup);
+});
+
+// новая карточка
+formElementAdd.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+
+  // берем значения из полей
+  const initialCard = {
+    name: placeName.value,
+    link: linkInput.value,
+  };
+
+  // создаем карточку и добавляем её
+  const newCardElement = createCard(initialCard, deleteCard, likeCard, openPopupImage);
+  placesList.prepend(newCardElement);
+
+  closePopup(addPopup);
+  formElementAdd.reset(); // очищаем поля
+});
+
+// Открытие попапа редактирования профиля
+openEditPopupButton.addEventListener("click", () => {
+  nameInput.value = profileName.textContent; // заполняем поле "Имя"
+  descriptionInput.value = profileDescription.textContent; // заполняем поле "Занятие"
+  openPopup(editPopup);
+});
+
+formElementEdit.addEventListener("submit", (evt) => {
+  handleFormSubmit(
+    evt,
+    profileName,
+    profileDescription,
+    nameInput,
+    descriptionInput,
+    editPopup
+  );
 });
