@@ -6,11 +6,9 @@ import {
   deleteCard,
   likeCard,
 } from "./components/cards.js";
-import { openPopup, closePopup } from "./components/modal.js";
+import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
 
 const placesList = document.querySelector(".places__list");
-
-const closeButtons = document.querySelectorAll(".popup__close");
 
 const openAddPopupButton = document.querySelector(".profile__add-button");
 const openEditPopupButton = document.querySelector(".profile__edit-button");
@@ -100,12 +98,6 @@ function handleNewPlaceSubmit(evt) {
 };
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 
+initializePopupCloseButtons();
+initializePopupClickOutside()
 
-// Закрытие попапов по кнопкам закрытия 
-closeButtons.forEach((button) => { 
-  button.addEventListener("click", () => { 
-    const popup = button.closest(".popup"); 
-    closePopup(popup); 
-  }); 
-}); 
- 

@@ -1,4 +1,4 @@
-export { openPopup, closePopup };
+export { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside };
 
 
 // функция для открытия попапа
@@ -24,9 +24,22 @@ function handleEscClose(evt) {
   };
 };
 
+// Закрытие попапов по кнопкам закрытия
+function initializePopupCloseButtons() {
+  const closeButtons = document.querySelectorAll(".popup__close");
+  closeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const popup = button.closest(".popup");
+      closePopup(popup);
+    });
+  });
+}
+
 // Закрытие попапа по клику вне его контента 
-document.addEventListener("click", (evt) => { 
-  if (evt.target.classList.contains("popup_is-opened")) { 
-    closePopup(evt.target); 
-  } 
-}); 
+function initializePopupClickOutside() {
+  document.addEventListener("click", (evt) => {
+    if (evt.target.classList.contains("popup_is-opened")) {
+      closePopup(evt.target);
+    }
+  });
+} 
