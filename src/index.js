@@ -7,7 +7,7 @@ import {
   likeCard,
 } from "./components/cards.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
-import { resetValidationErrors, enableValidation} from "./components/validation.js"
+import { resetValidationErrors, enableValidation } from "./components/validation.js"
 
 const placesList = document.querySelector(".places__list");
 
@@ -52,6 +52,7 @@ function openPopupImage(imageSrc, imageAlt, caption) {
 
 // Открытие попапа добавления новой карточки
 openAddPopupButton.addEventListener("click", () => {
+  resetValidationErrors();
   openPopup(addPopup);
 });
 
@@ -59,8 +60,8 @@ openAddPopupButton.addEventListener("click", () => {
 openEditPopupButton.addEventListener("click", () => {
   nameInput.value = profileName.textContent; // заполняем поле "Имя"
   descriptionInput.value = profileDescription.textContent; // заполняем поле "Занятие"
-  openPopup(editPopup);
   resetValidationErrors();
+  openPopup(editPopup);
 });
 
 
@@ -97,6 +98,7 @@ function handleNewPlaceSubmit(evt) {
 
   closePopup(addPopup);
   formElementAdd.reset(); // очищаем поля
+  resetValidationErrors(); // сбрасываем валидацию
 };
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 
