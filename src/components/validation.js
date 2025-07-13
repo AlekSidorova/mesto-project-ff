@@ -1,6 +1,7 @@
-export { resetValidationErrors, enableValidation };
+export { resetValidationErrors, enableValidation, resetValidationErrorsAdd, enableValidationNewPlace, buttonElementAdd };
 
-const formElement = document.querySelector(".popup__form");
+// все для формы "Редактировать профиль"
+const formElement = document.querySelector('form[name="edit-profile"]');
 const buttonElement = formElement.querySelector(".popup__button");
 
 // регулярное сообщение
@@ -95,7 +96,6 @@ const toggleSaveButton = (inputList, buttonElement) => {
     }
 };
 
-
 // функция для сброса ошибок валидации
 const resetValidationErrors = () => {
     const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
@@ -108,4 +108,68 @@ const resetValidationErrors = () => {
 };
 
 
+// все для формы "Новое место"
+const formElementAdd = document.querySelector('form[name="new-place"]'); // сама форма
+const buttonElementAdd = formElementAdd.querySelector(".popup__button"); // Определение кнопки в форме добавления
 
+const nameValidPattern = /^[a-zA-Zа-яА-ЯёЁ0-9\s-]+$/; 
+
+const isValidAdd = (formElement, inputElement) => {
+    if (inputElement.validity.valueMissing) {
+        inputElement.setCustomValidity(inputElement.dataset.errorEmpty); // Если пусто - кастомное сообщение
+    } else if (inputElement.name === 'place-name') {
+        if (!nameValidPattern.test(inputElement.value)) {
+            inputElement.setCustomValidity("Название должно содержать только латинские и кириллические буквы, пробелы и дефисы.");
+        } else {
+            inputElement.setCustomValidity(""); // Сбрасываем ошибку
+        }
+
+    //проверка ссылки
+    } else if (inputElement.name === 'link') {
+        const urlPattern = /^(https?:\/\/.+\..+)$/; // Пример простой проверки URL
+        // Проверяем только на наличие значения
+        if (inputElement.validity.valueMissing) {
+            inputElement.setCustomValidity(inputElement.dataset.errorEmpty);
+        } else if (!urlPattern.test(inputElement.value)) {
+            inputElement.setCustomValidity("Введите адрес сайта."); // Сообщение для некорректного URL
+        } else {
+            inputElement.setCustomValidity(""); // Сбрасываем ошибку
+        }
+    }
+
+    // Проверка валидности
+    if (!inputElement.validity.valid) {
+        showInputError(formElement, inputElement, inputElement.validationMessage);
+    } else {
+        hideInputError(formElement, inputElement);
+    }
+};
+
+// Обновляем обработчики событий для формы добавления места
+const setEventListenersAdd = (formElement) => {
+    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
+
+    inputList.forEach((inputElement) => {
+        inputElement.addEventListener('input', () => {
+            isValidAdd(formElement, inputElement); // Проверяем валидность
+            toggleSaveButton(inputList, buttonElementAdd); // Проверяем состояние кнопки
+        });
+    });
+};
+
+// Обновлено для сброса ошибок валидации
+const resetValidationErrorsAdd = () => {
+    const inputList = Array.from(formElementAdd.querySelectorAll('.popup__input'));
+
+    inputList.forEach(inputElement => {
+        hideInputError(formElementAdd, inputElement);
+        inputElement.value = ""; // Очищаем значения инпутов
+        inputElement.setCustomValidity(""); // Сбрасываем все кастомные сообщения
+    });
+    toggleSaveButton(inputList, buttonElementAdd); // Убедимся, что кнопка неактивна
+};
+
+// Вызов функции для инициализации валидации новой формы
+const enableValidationNewPlace = () => {
+    setEventListenersAdd(formElementAdd);
+};

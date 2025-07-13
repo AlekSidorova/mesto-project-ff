@@ -7,7 +7,7 @@ import {
   likeCard,
 } from "./components/cards.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
-import { resetValidationErrors, enableValidation } from "./components/validation.js"
+import { resetValidationErrors, enableValidation, resetValidationErrorsAdd, enableValidationNewPlace, buttonElementAdd } from "./components/validation.js"
 
 const placesList = document.querySelector(".places__list");
 
@@ -52,7 +52,12 @@ function openPopupImage(imageSrc, imageAlt, caption) {
 
 // Открытие попапа добавления новой карточки
 openAddPopupButton.addEventListener("click", () => {
-  resetValidationErrors();
+  resetValidationErrorsAdd();
+
+  // Убедитесь, что кнопка неактивна при открытии попапа
+    buttonElementAdd.disabled = true; // Делаем кнопку неактивной
+    buttonElementAdd.classList.add('popup__button_disabled'); // Добавляем класс для визуального эффекта
+
   openPopup(addPopup);
 });
 
@@ -98,7 +103,7 @@ function handleNewPlaceSubmit(evt) {
 
   closePopup(addPopup);
   formElementAdd.reset(); // очищаем поля
-  resetValidationErrors(); // сбрасываем валидацию
+  resetValidationErrorsAdd(); // сбрасываем валидацию
 };
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 
@@ -106,3 +111,4 @@ initializePopupCloseButtons();
 initializePopupClickOutside();
 
 enableValidation();
+enableValidationNewPlace();
