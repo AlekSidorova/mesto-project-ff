@@ -7,7 +7,7 @@ import {
   likeCard,
 } from "./components/cards.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
-import { resetValidationErrors, enableValidation, resetValidationErrorsAdd, enableValidationNewPlace, buttonElementAdd } from "./components/validation.js"
+import { resetProfileValidationErrors, enableValidation, resetNewPlaceValidationErrors, buttonElementAdd, buttonElement } from "./components/validation.js"
 
 const placesList = document.querySelector(".places__list");
 
@@ -52,7 +52,7 @@ function openPopupImage(imageSrc, imageAlt, caption) {
 
 // Открытие попапа добавления новой карточки
 openAddPopupButton.addEventListener("click", () => {
-  resetValidationErrorsAdd();
+  resetNewPlaceValidationErrors();
 
   // Убедитесь, что кнопка неактивна при открытии попапа
     buttonElementAdd.disabled = true; // Делаем кнопку неактивной
@@ -65,7 +65,12 @@ openAddPopupButton.addEventListener("click", () => {
 openEditPopupButton.addEventListener("click", () => {
   nameInput.value = profileName.textContent; // заполняем поле "Имя"
   descriptionInput.value = profileDescription.textContent; // заполняем поле "Занятие"
-  resetValidationErrors();
+  resetProfileValidationErrors();
+
+  // Установим активное состояние кнопки "Сохранить" сразу при открытии попапа
+  buttonElement.disabled = false; // Делаем кнопку активной
+  buttonElement.classList.remove('popup__button_disabled'); // Убираем класс для визуального эффекта
+
   openPopup(editPopup);
 });
 
@@ -103,7 +108,7 @@ function handleNewPlaceSubmit(evt) {
 
   closePopup(addPopup);
   formElementAdd.reset(); // очищаем поля
-  resetValidationErrorsAdd(); // сбрасываем валидацию
+  resetNewPlaceValidationErrors(); // сбрасываем валидацию
 };
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 
@@ -111,4 +116,3 @@ initializePopupCloseButtons();
 initializePopupClickOutside();
 
 enableValidation();
-enableValidationNewPlace();

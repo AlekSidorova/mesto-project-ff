@@ -1,19 +1,43 @@
-export { resetValidationErrors, enableValidation, resetValidationErrorsAdd, enableValidationNewPlace, buttonElementAdd };
+export { resetProfileValidationErrors, enableValidation, resetNewPlaceValidationErrors, buttonElementAdd, buttonElement };
 
-// все для формы "Редактировать профиль"
+// Инициализация для формы "Редактировать профиль"
 const formElement = document.querySelector('form[name="edit-profile"]');
 const buttonElement = formElement.querySelector(".popup__button");
 
-// регулярное сообщение
-const validPattern = /^[a-zA-Zа-яА-ЯёЁ0-9\s-]+$/;
+// Инициализация для формы "Новое место"
+const formElementAdd = document.querySelector('form[name="new-place"]');
+const buttonElementAdd = formElementAdd.querySelector(".popup__button");
+
 
 const isValid = (inputElement) => {
+    const validPattern = /^[a-zA-Zа-яА-ЯёЁ0-9\s-]+$/;
+    const urlPattern = /^(https?:\/\/.+\..+)$/;
+
+    // Проверка на обязательность поля
     if (inputElement.validity.valueMissing) {
         inputElement.setCustomValidity(inputElement.dataset.errorEmpty);
-    } else if (!validPattern.test(inputElement.value)) {
+    } 
+    // Валидация для имени места
+    else if (inputElement.name === 'place-name') {
+        if (!validPattern.test(inputElement.value)) {
+            inputElement.setCustomValidity("Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы");
+        } else {
+            inputElement.setCustomValidity(""); // Сбрасываем ошибку
+        }
+    } 
+    // Валидация для ссылки
+    else if (inputElement.name === 'link') {
+        if (!urlPattern.test(inputElement.value)) {
+            inputElement.setCustomValidity("Введите адрес сайта."); // Сообщение для некорректного URL
+        } else {
+            inputElement.setCustomValidity(""); // Сбрасываем ошибку
+        }
+    } 
+    // Валидация для других полей
+    else if (!validPattern.test(inputElement.value)) {
         inputElement.setCustomValidity("Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы");
     } else {
-        inputElement.setCustomValidity("");
+        inputElement.setCustomValidity(""); // Сбрасываем ошибку
     }
 };
 
@@ -45,8 +69,7 @@ const validateInput = (formElement, inputElement) => {
     }
 };
 
-// Установка обработчиков событий для формы
-const setEventListeners = (formElement) => {
+const setEventListeners = (formElement, buttonElement) => {
     const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', () => {
@@ -56,9 +79,10 @@ const setEventListeners = (formElement) => {
     });
 };
 
-// Инициализация валидации для формы "Редактировать профиль"
+// Инициализация слушателей для форм
 const enableValidation = () => {
-    setEventListeners(formElement);
+    setEventListeners(formElement, buttonElement);
+    setEventListeners(formElementAdd, buttonElementAdd);
 };
 
 // Проверка на наличие невалидных инпутов
@@ -77,80 +101,22 @@ const toggleSaveButton = (inputList, buttonElement) => {
     }
 };
 
-
-// Сброс ошибок валидации
-const resetValidationErrors = () => {
+// Универсальная функция для сброса ошибок валидации
+const resetValidationErrors = (formElement, buttonElement) => {
     const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
     inputList.forEach(inputElement => {
         hideInputError(formElement, inputElement);
-        inputElement.setCustomValidity("");
+        inputElement.value = ""; // Очищаем значения инпутов
+        inputElement.setCustomValidity(""); // Сбрасываем все кастомные сообщения
     });
     toggleSaveButton(inputList, buttonElement);
 };
 
-// все для формы "Новое место"
-const formElementAdd = document.querySelector('form[name="new-place"]'); // сама форма
-const buttonElementAdd = formElementAdd.querySelector(".popup__button"); // Определение кнопки в форме добавления
-
-const nameValidPattern = /^[a-zA-Zа-яА-ЯёЁ0-9\s-]+$/;
-
-const isValidAdd = (inputElement) => {
-    if (inputElement.validity.valueMissing) {
-        inputElement.setCustomValidity(inputElement.dataset.errorEmpty);
-    } else if (inputElement.name === 'place-name') {
-        if (!nameValidPattern.test(inputElement.value)) {
-            inputElement.setCustomValidity("Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы");
-        } else {
-            inputElement.setCustomValidity(""); // Сбрасываем ошибку
-        }
-
-        //проверка ссылки
-    } else if (inputElement.name === 'link') {
-        const urlPattern = /^(https?:\/\/.+\..+)$/;
-        // Проверяем только на наличие значения
-        if (inputElement.validity.valueMissing) {
-            inputElement.setCustomValidity(inputElement.dataset.errorEmpty);
-        } else if (!urlPattern.test(inputElement.value)) {
-            inputElement.setCustomValidity("Введите адрес сайта."); // Сообщение для некорректного URL
-        } else {
-            inputElement.setCustomValidity(""); // Сбрасываем ошибку
-        }
-    }
+// Использование универсальной функции для сброса ошибок
+const resetProfileValidationErrors = () => {
+    resetValidationErrors(formElement, buttonElement);
 };
 
-// Проверка валидности инпута и отображение ошибок для новой формы
-const validateInputAdd = (formElement, inputElement) => {
-    isValidAdd(inputElement);
-    if (!inputElement.validity.valid) {
-        showInputError(formElement, inputElement, inputElement.validationMessage);
-    } else {
-        hideInputError(formElement, inputElement);
-    }
-};
-
-// Установка обработчиков событий для формы добавления места
-const setEventListenersAdd = (formElementAdd) => {
-    const inputList = Array.from(formElementAdd.querySelectorAll('.popup__input'));
-    inputList.forEach((inputElement) => {
-        inputElement.addEventListener('input', () => {
-            validateInputAdd(formElementAdd, inputElement);
-            toggleSaveButton(inputList, buttonElementAdd);
-        });
-    });
-};
-
-// Сброс ошибок валидации для новой формы
-const resetValidationErrorsAdd = () => {
-    const inputList = Array.from(formElementAdd.querySelectorAll('.popup__input'));
-    inputList.forEach(inputElement => {
-        hideInputError(formElementAdd, inputElement);
-        inputElement.value = ""; // Очищаем значения инпутов
-        inputElement.setCustomValidity(""); // Сбрасываем все кастомные сообщения
-    });
-    toggleSaveButton(inputList, buttonElementAdd);
-};
-
-// Инициализация валидации для новой формы
-const enableValidationNewPlace = () => {
-    setEventListenersAdd(formElementAdd);
+const resetNewPlaceValidationErrors = () => {
+    resetValidationErrors(formElementAdd, buttonElementAdd);
 };
