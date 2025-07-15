@@ -1,4 +1,4 @@
-export { resetProfileValidationErrors, enableValidation, resetNewPlaceValidationErrors, buttonElementAdd, buttonElement };
+export { enableValidation, resetNewPlaceValidationErrors, buttonElementAdd, buttonElement, clearValidation };
 
 // Инициализация для формы "Редактировать профиль"
 const formElement = document.querySelector('form[name="edit-profile"]');
@@ -118,6 +118,21 @@ const resetProfileValidationErrors = () => {
 
 const resetNewPlaceValidationErrors = () => {
     resetValidationErrors(formElementAdd, buttonElementAdd);
+};
+
+const clearValidation = (formElement, { inputSelector, submitButtonSelector, inactiveButtonClass }) => {
+    const inputList = Array.from(formElement.querySelectorAll(inputSelector));
+    const buttonElement = formElement.querySelector(submitButtonSelector);
+
+    inputList.forEach(inputElement => {
+        hideInputError(formElement, inputElement); // Очищаем ошибки
+        inputElement.value = ""; // Очищаем значения инпутов
+        inputElement.setCustomValidity(""); // Сбрасываем все кастомные сообщения
+    });
+
+    // Делаем кнопку неактивной
+    buttonElement.disabled = true;
+    buttonElement.classList.add(inactiveButtonClass);
 };
 
 enableValidation({
