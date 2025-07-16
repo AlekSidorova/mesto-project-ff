@@ -1,4 +1,4 @@
-export {loadUserInfo, getCards, editingProfile};
+export {loadUserInfo, getCards, editingProfile, addingNewCard};
 
 const MYTOKEN = 'e4c415db-c6a6-4869-b720-3932e0cc453d';
 
@@ -40,6 +40,7 @@ function getCards() {
   })
 };
 
+
 // функция редактирования профиля
 function editingProfile(name, about) {
   return fetch('https://nomoreparties.co/v1/wff-cohort-42/users/me', {
@@ -59,6 +60,28 @@ function editingProfile(name, about) {
     }
     return res.json(); // Преобразование ответа в JSON
   });
-}
+};
+
+
+// добавление новой карточки
+function addingNewCard(name, link) {
+  return fetch('https://nomoreparties.co/v1/wff-cohort-42/cards', {
+    method: 'POST',
+    headers: {
+      authorization: MYTOKEN,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: name, // передаем имя карточки
+      link: link, // передаем ссылку на изображение
+    }),
+  })
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`Ошибка: ${res.status}`);
+    }
+    return res.json(); // Преобразование ответа в JSON
+  });
+};
 
 

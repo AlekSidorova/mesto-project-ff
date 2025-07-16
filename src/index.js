@@ -3,7 +3,7 @@ import "./index.css";
 import { createCard, deleteCard, likeCard } from "./components/cards.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
 import { enableValidation, resetValidationErrors, clearValidation } from "./components/validation.js";
-import { loadUserInfo, getCards, editingProfile } from "./components/api.js"
+import { loadUserInfo, getCards, editingProfile, addingNewCard } from "./components/api.js"
 
 const placesList = document.querySelector(".places__list");
 
@@ -133,25 +133,35 @@ formElementEdit.addEventListener("submit", handleEditProfileSubmit);
 function handleNewPlaceSubmit(evt) {
   evt.preventDefault();
 
-  // берем значения из полей
-  const initialCard = {
-    name: placeName.value,
-    link: linkInput.value,
-  };
+  // Получаем значения из полей ввода
+  const placeNameValue = placeName.value; // Название места
+  const linkInputValue = linkInput.value; // Ссылка на изображение
 
-  // создаем карточку и добавляем её
-  const newCardElement = createCard(
-    initialCard,
-    deleteCard,
-    likeCard,
-    openPopupImage
-  );
-  placesList.prepend(newCardElement);
+  // Вызов функции добавления новой карточки
+  addingNewCard(placeNameValue, linkInputValue) 
+    .then(data => {
+      const newCardElement = createCard(
+        {
+          name: data.name, // Используем данные, которые приходят с сервера
+          link: data.link,
+        },
+        deleteCard,
+        likeCard,
+        openPopupImage
+      );
 
-  closePopup(addPopup);
-  formElementAdd.reset(); // очищаем поля
-  resetValidationErrors(formElementAdd, buttonElementAdd);; // сбрасываем валидацию
-};
+      // Добавляем карточку в начало списка
+      placesList.prepend(newCardElement);
+
+      // Закрываем попап и сбрасываем форму
+      closePopup(addPopup);
+      formElementAdd.reset();
+      resetValidationErrors(formElementAdd, buttonElementAdd); // Сбрасываем валидацию
+    })
+    .catch(err => {
+      console.error("Ошибка добавления карточки:", err); // Обработка ошибок
+    });
+}
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 
 initializePopupCloseButtons();
