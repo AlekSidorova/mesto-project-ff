@@ -3,7 +3,7 @@ import "./index.css";
 import { createCard, deleteCard, likeCard } from "./components/cards.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
 import { enableValidation, resetValidationErrors, clearValidation } from "./components/validation.js";
-import { loadUserInfo, getCards } from "./components/api.js"
+import { loadUserInfo, getCards, editingProfile } from "./components/api.js"
 
 const placesList = document.querySelector(".places__list");
 
@@ -110,11 +110,22 @@ openEditPopupButton.addEventListener("click", () => {
 function handleEditProfileSubmit(evt) {
   evt.preventDefault();
 
-  profileName.textContent = nameInput.value;
-  profileDescription.textContent = descriptionInput.value;
+  const newName = nameInput.value; // Получаем новое имя из поля
+  const newAbout = descriptionInput.value; // Получаем новое описание
 
-  // Закрываем попап
-  closePopup(editPopup);
+  // Вызов функции редактирования профиля
+  editingProfile(newName, newAbout) 
+    .then(data => {
+      // Если все прошло успешно, обновляем данные на странице
+      profileName.textContent = data.name; // Обновляем имя
+      profileDescription.textContent = data.about; // Обновляем описание
+      document.querySelector('.profile__image').src = data.avatar; // Обновляем аватар
+
+      closePopup(editPopup); // Закрываем попап
+    })
+    .catch(err => {
+      console.error("Ошибка редактирования профиля:", err); // Обработка ошибок
+    });
 };
 formElementEdit.addEventListener("submit", handleEditProfileSubmit);
 
