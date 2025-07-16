@@ -7,7 +7,7 @@ import {
   likeCard,
 } from "./components/cards.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
-import { enableValidation, resetValidationErrors } from "./components/validation.js"
+import { enableValidation, resetValidationErrors, clearValidation } from "./components/validation.js"
 
 const placesList = document.querySelector(".places__list");
 
@@ -56,7 +56,11 @@ function openPopupImage(imageSrc, imageAlt, caption) {
 openAddPopupButton.addEventListener("click", () => {
   placeName.value = '';
   linkInput.value = '';
-  resetNewPlaceValidationErrors();
+   clearValidation(formElementAdd, {
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+  });
 
   // Убедитесь, что кнопка неактивна при открытии попапа
   buttonElementAdd.disabled = true; // Делаем кнопку неактивной
@@ -69,7 +73,11 @@ openAddPopupButton.addEventListener("click", () => {
 openEditPopupButton.addEventListener("click", () => {
   nameInput.value = profileName.textContent; // заполняем поле "Имя"
   descriptionInput.value = profileDescription.textContent; // заполняем поле "Занятие"
-  resetProfileValidationErrors();
+  clearValidation(formElementEdit, {
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+  });
 
   // Установим активное состояние кнопки "Сохранить" сразу при открытии попапа
   buttonElement.disabled = false; // Делаем кнопку активной
@@ -118,13 +126,6 @@ formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 
 initializePopupCloseButtons();
 initializePopupClickOutside();
-
-// Использование универсальной функции для сброса ошибок
-const resetProfileValidationErrors = () => {
-  const formElement = document.querySelector('form[name="edit-profile"]');
-  const buttonElement = formElement.querySelector(".popup__button");
-  resetValidationErrors(formElement, buttonElement);
-};
 
 const resetNewPlaceValidationErrors = () => {
   const formElementAdd = document.querySelector('form[name="new-place"]');

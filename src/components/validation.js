@@ -1,4 +1,4 @@
-export { enableValidation, resetValidationErrors };
+export { enableValidation, resetValidationErrors, clearValidation };
 
 const isValid = (inputElement) => {
     const validPattern = /^[a-zA-Zа-яА-ЯёЁ0-9\s-]+$/;
@@ -103,4 +103,18 @@ const resetValidationErrors = (formElement, buttonElement) => {
         inputElement.setCustomValidity(""); // Сбрасываем все кастомные сообщения
     });
     toggleSaveButton(inputList, buttonElement);
+};
+
+const clearValidation = (formElement, { inputSelector, submitButtonSelector, inactiveButtonClass }) => {
+    const buttonElement = formElement.querySelector(submitButtonSelector);
+    const inputList = Array.from(formElement.querySelectorAll(inputSelector));
+
+    inputList.forEach(inputElement => {
+        hideInputError(formElement, inputElement);
+        inputElement.setCustomValidity(""); 
+    });
+
+    // Делаем кнопку неактивной
+    buttonElement.disabled = true;
+    buttonElement.classList.add(inactiveButtonClass);
 };
