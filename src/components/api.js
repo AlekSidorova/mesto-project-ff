@@ -1,26 +1,43 @@
-export {loadUserInfo};
+export {loadUserInfo, getCards};
 
+const MYTOKEN = 'e4c415db-c6a6-4869-b720-3932e0cc453d';
+
+// инфо о пользователе 
 const loadUserInfo = () => {
-  return fetch(`https://mesto.nomoreparties.co/v1/wff-cohort-42/users/me`, {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-42/users/me`, {
     method: 'GET',
     headers: {
-      authorization: 'e4c415db-c6a6-4869-b720-3932e0cc453d', // Ваш токен
+      authorization: MYTOKEN,
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`Ошибка: ${res.status}`);
+    }
+    return res.json();
+  })
+  .then(data => {
+    return data; // Вернуть данные
+  });
+};
+
+
+// функция для загрузки карточек
+function getCards() {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-42/cards`, {
+    method: 'GET',
+    headers: {
+      authorization: MYTOKEN,
       'Content-Type': 'application/json'
     }
   })
   .then(res => {
-    // Проверка, был ли запрос успешным
     if (!res.ok) {
       throw new Error(`Ошибка: ${res.status}`);
     }
     return res.json(); // Преобразование ответа в JSON
   })
-  .then(data => {
-    console.log(data); // Вывод полученных данных в консоль
-  })
-  .catch(err => {
-    console.error(err); // Обработка ошибок
-  });
 };
 
 

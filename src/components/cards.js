@@ -1,4 +1,4 @@
-export { initialCards, createCard, deleteCard, likeCard };
+export { createCard, deleteCard, likeCard };
 
 
 const initialCards = [

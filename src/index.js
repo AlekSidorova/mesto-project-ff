@@ -1,14 +1,9 @@
 import "./index.css";
 
-import {
-  initialCards,
-  createCard,
-  deleteCard,
-  likeCard,
-} from "./components/cards.js";
+import { createCard, deleteCard, likeCard } from "./components/cards.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
 import { enableValidation, resetValidationErrors, clearValidation } from "./components/validation.js";
-import { loadUserInfo } from "./components/api.js"
+import { loadUserInfo, getCards } from "./components/api.js"
 
 const placesList = document.querySelector(".places__list");
 
@@ -37,12 +32,37 @@ const linkInput = formElementAdd.querySelector('input[name="link"]'); // "Ссы
 const buttonElementAdd = formElementAdd.querySelector(".popup__button");
 
 
-// перебираем весь массив и выводим все карточки
-initialCards.forEach((card) => {
-  const cardElement = createCard(card, deleteCard, likeCard, openPopupImage);
-  placesList.append(cardElement);
-});
+// Функция для загрузки данных о пользователе и карточках
+const loadData = () => {
+  Promise.all([loadUserInfo(), getCards()])
+    .then(([userData, cards]) => {
 
+      if (!userData || !Array.isArray(cards)) {
+        throw new Error("Не удалось загрузить данные пользователя или карточки.");
+      }
+
+      // Устанавливаем данные пользователя на странице
+      profileName.textContent = userData.name;
+      profileDescription.textContent = userData.about;
+      document.querySelector('.profile__image').src = userData.avatar;
+
+      // Перебираем массив карточек и отображаем их
+      cards.forEach(card => {
+        if (card.name && card.link) { // Проверка наличия полей
+          const cardElement = createCard({
+            name: card.name,
+            link: card.link,
+          }, deleteCard, likeCard, openPopupImage);
+          placesList.append(cardElement);
+        } else {
+          console.error("Ошибка: У одной из карточек отсутствуют необходимые поля.", card);
+        }
+      });
+    })
+    .catch(err => {
+      console.error("Ошибка загрузки данных:", err);
+    });
+};
 
 // открытие попапа с изображением
 function openPopupImage(imageSrc, imageAlt, caption) {
@@ -63,7 +83,6 @@ openAddPopupButton.addEventListener("click", () => {
     inactiveButtonClass: 'popup__button_disabled',
   });
 
-  // Убедитесь, что кнопка неактивна при открытии попапа
   buttonElementAdd.disabled = true; // Делаем кнопку неактивной
   buttonElementAdd.classList.add('popup__button_disabled'); // Добавляем класс для визуального эффекта
 
@@ -80,7 +99,6 @@ openEditPopupButton.addEventListener("click", () => {
     inactiveButtonClass: 'popup__button_disabled',
   });
 
-  // Установим активное состояние кнопки "Сохранить" сразу при открытии попапа
   buttonElement.disabled = false; // Делаем кнопку активной
   buttonElement.classList.remove('popup__button_disabled'); // Убираем класс для визуального эффекта
 
@@ -139,4 +157,4 @@ enableValidation({
 
 
 // Вызов функции для загрузки информации
-loadUserInfo();
+loadData();
