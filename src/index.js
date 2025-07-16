@@ -7,7 +7,8 @@ import {
   likeCard,
 } from "./components/cards.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
-import { enableValidation, resetValidationErrors, clearValidation } from "./components/validation.js"
+import { enableValidation, resetValidationErrors, clearValidation } from "./components/validation.js";
+import { loadUserInfo } from "./components/api.js"
 
 const placesList = document.querySelector(".places__list");
 
@@ -135,3 +136,7 @@ enableValidation({
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__input-error_active'
 });
+
+
+// Вызов функции для загрузки информации
+loadUserInfo();
