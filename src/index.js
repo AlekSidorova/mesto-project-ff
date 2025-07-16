@@ -52,6 +52,8 @@ function openPopupImage(imageSrc, imageAlt, caption) {
 
 // Открытие попапа добавления новой карточки
 openAddPopupButton.addEventListener("click", () => {
+  placeName.value = '';
+  linkInput.value = '';
   resetNewPlaceValidationErrors();
 
   // Убедитесь, что кнопка неактивна при открытии попапа

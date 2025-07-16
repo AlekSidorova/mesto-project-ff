@@ -118,4 +118,5 @@ const resetProfileValidationErrors = () => {
 
 const resetNewPlaceValidationErrors = () => {
     resetValidationErrors(formElementAdd, buttonElementAdd);
+    
 };
