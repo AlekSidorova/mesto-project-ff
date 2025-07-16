@@ -1,13 +1,4 @@
-export { resetProfileValidationErrors, enableValidation, resetNewPlaceValidationErrors, buttonElementAdd, buttonElement };
-
-// Инициализация для формы "Редактировать профиль"
-const formElement = document.querySelector('form[name="edit-profile"]');
-const buttonElement = formElement.querySelector(".popup__button");
-
-// Инициализация для формы "Новое место"
-const formElementAdd = document.querySelector('form[name="new-place"]');
-const buttonElementAdd = formElementAdd.querySelector(".popup__button");
-
+export { enableValidation, resetValidationErrors };
 
 const isValid = (inputElement) => {
     const validPattern = /^[a-zA-Zа-яА-ЯёЁ0-9\s-]+$/;
@@ -79,10 +70,13 @@ const setEventListeners = (formElement, buttonElement) => {
     });
 };
 
-// Инициализация слушателей для форм
-const enableValidation = () => {
-    setEventListeners(formElement, buttonElement);
-    setEventListeners(formElementAdd, buttonElementAdd);
+const enableValidation = ({ formSelector, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass }) => {
+    const formList = Array.from(document.querySelectorAll(formSelector));
+
+    formList.forEach((formElement) => {
+        const buttonElement = formElement.querySelector(submitButtonSelector);
+        setEventListeners(formElement, buttonElement, inputSelector);
+    });
 };
 
 // Проверка на наличие невалидных инпутов
@@ -109,14 +103,4 @@ const resetValidationErrors = (formElement, buttonElement) => {
         inputElement.setCustomValidity(""); // Сбрасываем все кастомные сообщения
     });
     toggleSaveButton(inputList, buttonElement);
-};
-
-// Использование универсальной функции для сброса ошибок
-const resetProfileValidationErrors = () => {
-    resetValidationErrors(formElement, buttonElement);
-};
-
-const resetNewPlaceValidationErrors = () => {
-    resetValidationErrors(formElementAdd, buttonElementAdd);
-    
 };

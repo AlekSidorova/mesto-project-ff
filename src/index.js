@@ -7,7 +7,7 @@ import {
   likeCard,
 } from "./components/cards.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
-import { resetProfileValidationErrors, enableValidation, resetNewPlaceValidationErrors, buttonElementAdd, buttonElement } from "./components/validation.js"
+import { enableValidation, resetValidationErrors } from "./components/validation.js"
 
 const placesList = document.querySelector(".places__list");
 
@@ -28,10 +28,12 @@ const descriptionInput = formElementEdit.querySelector(
 );
 const profileName = document.querySelector(".profile__title"); // Элемент для имени профиля
 const profileDescription = document.querySelector(".profile__description"); // Элемент для занятия
+const buttonElement = formElementEdit.querySelector(".popup__button");
 
 const formElementAdd = document.querySelector('form[name="new-place"]'); // сама форма
 const placeName = formElementAdd.querySelector('input[name="place-name"]'); // "Название"
 const linkInput = formElementAdd.querySelector('input[name="link"]'); // "Ссылка на картинку"
+const buttonElementAdd = formElementAdd.querySelector(".popup__button");
 
 
 // перебираем весь массив и выводим все карточки
@@ -57,8 +59,8 @@ openAddPopupButton.addEventListener("click", () => {
   resetNewPlaceValidationErrors();
 
   // Убедитесь, что кнопка неактивна при открытии попапа
-    buttonElementAdd.disabled = true; // Делаем кнопку неактивной
-    buttonElementAdd.classList.add('popup__button_disabled'); // Добавляем класс для визуального эффекта
+  buttonElementAdd.disabled = true; // Делаем кнопку неактивной
+  buttonElementAdd.classList.add('popup__button_disabled'); // Добавляем класс для визуального эффекта
 
   openPopup(addPopup);
 });
@@ -117,4 +119,24 @@ formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 initializePopupCloseButtons();
 initializePopupClickOutside();
 
-enableValidation();
+// Использование универсальной функции для сброса ошибок
+const resetProfileValidationErrors = () => {
+  const formElement = document.querySelector('form[name="edit-profile"]');
+  const buttonElement = formElement.querySelector(".popup__button");
+  resetValidationErrors(formElement, buttonElement);
+};
+
+const resetNewPlaceValidationErrors = () => {
+  const formElementAdd = document.querySelector('form[name="new-place"]');
+  const buttonElementAdd = formElementAdd.querySelector(".popup__button");
+  resetValidationErrors(formElementAdd, buttonElementAdd);
+};
+
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active'
+});
