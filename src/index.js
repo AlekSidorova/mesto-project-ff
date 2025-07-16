@@ -120,18 +120,12 @@ function handleNewPlaceSubmit(evt) {
 
   closePopup(addPopup);
   formElementAdd.reset(); // очищаем поля
-  resetNewPlaceValidationErrors(); // сбрасываем валидацию
+  resetValidationErrors(formElementAdd, buttonElementAdd);; // сбрасываем валидацию
 };
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 
 initializePopupCloseButtons();
 initializePopupClickOutside();
-
-const resetNewPlaceValidationErrors = () => {
-  const formElementAdd = document.querySelector('form[name="new-place"]');
-  const buttonElementAdd = formElementAdd.querySelector(".popup__button");
-  resetValidationErrors(formElementAdd, buttonElementAdd);
-};
 
 enableValidation({
   formSelector: '.popup__form',
