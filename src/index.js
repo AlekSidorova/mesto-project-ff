@@ -24,7 +24,7 @@ const descriptionInput = formElementEdit.querySelector(
 );
 const profileName = document.querySelector(".profile__title"); // Элемент для имени профиля
 const profileDescription = document.querySelector(".profile__description"); // Элемент для занятия
-const buttonElement = formElementEdit.querySelector(".popup__button");
+const buttonElementEdit = formElementEdit.querySelector(".popup__button");
 
 const formElementAdd = document.querySelector('form[name="new-place"]'); // сама форма
 const placeName = formElementAdd.querySelector('input[name="place-name"]'); // "Название"
@@ -38,6 +38,7 @@ const profileImageContainer = document.querySelector('.profile__image-container'
 const avatarPopup = document.querySelector('.popup_type_avatar');
 const urlInput = document.getElementById('avatar-url-input'); 
 const formElementAvatar = document.querySelector('form[name="edit-avatar"]');
+const buttonElementAvatar = formElementAvatar.querySelector(".popup__button");
 
 // Функция для загрузки данных о пользователе и карточках
 const loadData = () => {
@@ -114,8 +115,8 @@ openEditPopupButton.addEventListener("click", () => {
     inactiveButtonClass: 'popup__button_disabled',
   });
 
-  buttonElement.disabled = false; // Делаем кнопку активной
-  buttonElement.classList.remove('popup__button_disabled'); // Убираем класс для визуального эффекта
+  buttonElementEdit.disabled = false; // Делаем кнопку активной
+  buttonElementEdit.classList.remove('popup__button_disabled'); // Убираем класс для визуального эффекта
 
   openPopup(editPopup);
 });
@@ -125,28 +126,32 @@ openEditPopupButton.addEventListener("click", () => {
 function handleEditProfileSubmit(evt) {
   evt.preventDefault();
 
-  const newName = nameInput.value; // Получаем новое имя из поля
-  const newAbout = descriptionInput.value; // Получаем новое описание
+  buttonElementEdit.textContent = "Сохранение..."; // Изменяем текст кнопки на "Сохранение..."
 
-  // Вызов функции редактирования профиля
+  const newName = nameInput.value; 
+  const newAbout = descriptionInput.value; 
+
   editingProfile(newName, newAbout)
     .then(data => {
-      // Если все прошло успешно, обновляем данные на странице
-      profileName.textContent = data.name; // Обновляем имя
-      profileDescription.textContent = data.about; // Обновляем описание
-      document.querySelector('.profile__image').src = data.avatar; // Обновляем аватар
+      profileName.textContent = data.name; 
+      profileDescription.textContent = data.about; 
+      document.querySelector('.profile__image').src = data.avatar; 
 
-      closePopup(editPopup); // Закрываем попап
+      closePopup(editPopup); 
+      buttonElementEdit.textContent = "Сохранить"; // Возвращаем текст кнопки
     })
     .catch(err => {
-      console.error("Ошибка редактирования профиля:", err); // Обработка ошибок
+      console.error("Ошибка редактирования профиля:", err);
+      buttonElementEdit.textContent = "Сохранить"; // Возвращаем текст кнопки в случае ошибки
     });
-};
+}
 formElementEdit.addEventListener("submit", handleEditProfileSubmit);
 
 // Обработчик «отправки» формы добавления новой карточки
 function handleNewPlaceSubmit(evt) {
   evt.preventDefault();
+
+  buttonElementAdd.textContent = "Сохранение..."; // Изменяем текст кнопки на "Сохранение..."
 
   const placeNameValue = placeName.value; 
   const linkInputValue = linkInput.value; 
@@ -166,7 +171,6 @@ function handleNewPlaceSubmit(evt) {
         ownerId
       );
 
-      // Добавьте обработчик клика для новой карточки
       const imageCard = newCardElement.querySelector(".card__image");
       imageCard.addEventListener("click", () => {
         openPopupImage(data.link, data.name, data.name);
@@ -177,9 +181,11 @@ function handleNewPlaceSubmit(evt) {
       closePopup(addPopup);
       formElementAdd.reset();
       resetValidationErrors(formElementAdd, buttonElementAdd);
+      buttonElementAdd.textContent = "Сохранить"; // Возвращаем текст кнопки
     })
     .catch(err => {
       console.error("Ошибка добавления карточки:", err);
+      buttonElementAdd.textContent = "Сохранить"; // Возвращаем текст кнопки в случае ошибки
     });
 }
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
@@ -202,17 +208,19 @@ profileImageContainer.addEventListener('click', () => {
 formElementAvatar.addEventListener('submit', (evt) => {
   evt.preventDefault(); 
 
+  buttonElementAvatar.textContent = "Сохранение..."; // Изменяем текст кнопки на "Сохранение..."
+
   const newAvatarUrl = urlInput.value; 
   
-  // Обновление аватара
   updateAvatar(newAvatarUrl)
     .then(data => {
-      // Успешное обновление, обновляем аватар в интерфейсе
       document.querySelector('.profile__image').style.backgroundImage = `url(${data.avatar})`;
-      closePopup(avatarPopup); // Закрываем попап
+      closePopup(avatarPopup); 
+      buttonElementAvatar.textContent = "Сохранить"; // Возвращаем текст кнопки
     })
     .catch(err => {
       console.error("Ошибка обновления аватара:", err);
+      buttonElementAvatar.textContent = "Сохранить"; // Возвращаем текст кнопки в случае ошибки
     });
 });
 
