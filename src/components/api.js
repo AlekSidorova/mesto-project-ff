@@ -117,7 +117,6 @@ function deleteCard(cardId) {
   });
 };
 
-
 // обновление аватара
 function updateAvatar(avatar) {
   return fetch('https://nomoreparties.co/v1/wff-cohort-42/users/me/avatar', {
@@ -126,11 +125,13 @@ function updateAvatar(avatar) {
       authorization: MYTOKEN,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ avatar }) // Отправляем JSON с новыми данными аватара
+    body: JSON.stringify({ avatar: avatar }) // Отправляем JSON с новыми данными аватара
   })
   .then(res => {
     if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
+      return res.text().then(text => {
+        throw new Error(`Ошибка: ${res.status}, ${text}`); // Логируем текст ошибки
+      });
     }
     return res.json();
   });

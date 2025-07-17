@@ -36,8 +36,8 @@ let userData;
 // аватар
 const profileImageContainer = document.querySelector('.profile__image-container');
 const avatarPopup = document.querySelector('.popup_type_avatar');
-const urlInput = document.getElementById('url-input');
-const formElementAvatar = document.querySelector('form[name="edit-avatar"]');;
+const urlInput = document.getElementById('avatar-url-input'); 
+const formElementAvatar = document.querySelector('form[name="edit-avatar"]');
 
 // Функция для загрузки данных о пользователе и карточках
 const loadData = () => {
