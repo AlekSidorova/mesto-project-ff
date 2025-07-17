@@ -82,9 +82,9 @@ function addingNewCard(name, link) {
     }
     return res.json(); // Возвращаем данные карточки
   });
-}
+};
 
-// лайки
+// Отображение количества лайков карточки + Постановка и снятие лайка
 function toggleLike(cardId, isLiked) {
   return fetch(`https://nomoreparties.co/v1/wff-cohort-42/cards/likes/${cardId}`, {
     method: isLiked ? 'PUT' : 'DELETE', 
@@ -99,7 +99,7 @@ function toggleLike(cardId, isLiked) {
     }
     return res.json();
   });
-}
+};
 
 // Функция для удаления карточки
 function deleteCard(cardId) {
@@ -114,5 +114,6 @@ function deleteCard(cardId) {
       throw new Error(`Ошибка: ${res.status}`);
     }
   });
-}
+};
+
 

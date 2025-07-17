@@ -20,8 +20,9 @@ function createCard(initialCard, userId) {
   likeCount.textContent = initialCard.likes.length;
 
   // Проверка лайков
-  if (initialCard.likes.some(user => user._id === userId)) {
-    likeButton.classList.add("card__like-button_active");
+  const isLiked = initialCard.likes.some(user => user._id === userId);
+  if (isLiked) {
+    likeButton.classList.add("card__like-button_is-active"); // Меняем цвет сердечка
   }
 
   // Скрываем кнопку удаления, если карточка не ваша
@@ -29,11 +30,18 @@ function createCard(initialCard, userId) {
 
   // Обработчик события для лайка карточки
   likeButton.addEventListener("click", () => {
-    const isCurrentlyLiked = likeButton.classList.contains("card__like-button_active");
+    const isCurrentlyLiked = likeButton.classList.contains("card__like-button_is-active");
     toggleLike(initialCard._id, !isCurrentlyLiked)
       .then(updatedCard => {
-        likeCount.textContent = updatedCard.likes.length;
-        likeButton.classList.toggle("card__like-button_active");
+        // Обновляем количество лайков и состояние сердечка
+        likeCount.textContent = updatedCard.likes.length; 
+
+        // Смена цвета сердечка
+        if (isCurrentlyLiked) {
+          likeButton.classList.remove("card__like-button_is-active"); // Убираем активный класс
+        } else {
+          likeButton.classList.add("card__like-button_is-active"); // Добавляем активный класс
+        }
       })
       .catch(err => {
         console.error("Ошибка при обработке лайка:", err);
@@ -64,9 +72,4 @@ function openDeleteCardPopup(cardId, cardElement) {
     });
 }
 
-// // Функция для лайка карточки
-// function likeCard(evt) {
-//   const cardLike = evt.target;
-//   cardLike.classList.toggle("card__like-button_is-active"); 
-// };
 
