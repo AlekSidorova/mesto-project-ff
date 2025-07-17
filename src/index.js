@@ -95,7 +95,7 @@ openAddPopupButton.addEventListener("click", () => {
   clearValidation(formElementAdd, {
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
+    inactiveButtonClass: 'popup__button_disabled'
   });
 
   buttonElementAdd.disabled = true; // Делаем кнопку неактивной
@@ -184,17 +184,23 @@ function handleNewPlaceSubmit(evt) {
 }
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 
-// Обработчик клика по контейнеру изображения
+// Обработчик клика по аватару
 profileImageContainer.addEventListener('click', () => {
-  // Открываем попап редактирования аватара
   openPopup(avatarPopup);
+  urlInput.value = ''; // Очищаем поле URL
+  clearValidation(formElementAvatar, {
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled'
+  }); 
+  formElementAvatar.reset();
 });
 
 // Обработчик отправки формы
 formElementAvatar.addEventListener('submit', (evt) => {
-  evt.preventDefault(); // Предотвращаем отправку формы
+  evt.preventDefault(); 
 
-  const newAvatarUrl = urlInput.value; // Получаем новый URL аватара
+  const newAvatarUrl = urlInput.value; 
   
   // Вызов функции обновления аватара из api.js
   updateAvatar(newAvatarUrl)
@@ -203,8 +209,9 @@ formElementAvatar.addEventListener('submit', (evt) => {
       closePopup(avatarPopup); // Закрываем попап
     })
     .catch(err => {
-      console.error("Ошибка обновления аватара:", err); // Обработка ошибок
+      console.error("Ошибка обновления аватара:", err); // Обработка ошибо
     });
+
 });
 
 
