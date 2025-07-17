@@ -80,6 +80,15 @@
         <p class="popup__caption"></p>
       </div>
     </div>
+
+    <!-- <div id="confirm-delete-popup" class="popup popup_is-animated popup__delete">
+      <div class="popup__content">
+        <button type="button" class="popup__close"></button>
+        <h2 class="popup__title">Вы уверены?</h2>
+        <button type="submit" class="button popup__button">Да</button>
+      </div>
+    </div> -->
+    
   </div>
   <template id="card-template">
     <li class="places__item card">
@@ -88,7 +97,10 @@
       <div class="card__description">
         <h2 class="card__title">
         </h2>
-        <button type="button" class="card__like-button"></button>
+        <div class="card__like">
+          <button type="button" class="card__like-button"></button>
+          <span class="card__like-count"></span> <!-- кол во лайков -->
+        </div>
       </div>
     </li>
   </template>

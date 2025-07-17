@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { createCard, deleteCard, likeCard } from "./components/cards.js";
+import { createCard, openDeleteCardPopup } from "./components/cards.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
 import { enableValidation, resetValidationErrors, clearValidation } from "./components/validation.js";
 import { loadUserInfo, getCards, editingProfile, addingNewCard } from "./components/api.js"
@@ -31,12 +31,12 @@ const placeName = formElementAdd.querySelector('input[name="place-name"]'); // "
 const linkInput = formElementAdd.querySelector('input[name="link"]'); // "Ссылка на картинку"
 const buttonElementAdd = formElementAdd.querySelector(".popup__button");
 
+let userData;
 
 // Функция для загрузки данных о пользователе и карточках
 const loadData = () => {
   Promise.all([loadUserInfo(), getCards()])
     .then(([userData, cards]) => {
-
       if (!userData || !Array.isArray(cards)) {
         throw new Error("Не удалось загрузить данные пользователя или карточки.");
       }
@@ -48,15 +48,24 @@ const loadData = () => {
 
       // Перебираем массив карточек и отображаем их
       cards.forEach(card => {
-        if (card.name && card.link) { // Проверка наличия полей
-          const cardElement = createCard({
+        const cardElement = createCard(
+          {
             name: card.name,
             link: card.link,
-          }, deleteCard, likeCard, openPopupImage);
-          placesList.append(cardElement);
-        } else {
-          console.error("Ошибка: У одной из карточек отсутствуют необходимые поля.", card);
-        }
+            likes: card.likes,
+            _id: card._id,
+            owner: card.owner 
+          },
+          userData._id
+        );
+        
+        // Добавляем обработчик для открытия попапа
+        const imageCard = cardElement.querySelector(".card__image");
+        imageCard.addEventListener("click", () => {
+          openPopupImage(card.link, card.name, card.name);
+        });
+
+        placesList.append(cardElement);
       });
     })
     .catch(err => {
@@ -77,7 +86,7 @@ function openPopupImage(imageSrc, imageAlt, caption) {
 openAddPopupButton.addEventListener("click", () => {
   placeName.value = '';
   linkInput.value = '';
-   clearValidation(formElementAdd, {
+  clearValidation(formElementAdd, {
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__button',
     inactiveButtonClass: 'popup__button_disabled',
@@ -114,7 +123,7 @@ function handleEditProfileSubmit(evt) {
   const newAbout = descriptionInput.value; // Получаем новое описание
 
   // Вызов функции редактирования профиля
-  editingProfile(newName, newAbout) 
+  editingProfile(newName, newAbout)
     .then(data => {
       // Если все прошло успешно, обновляем данные на странице
       profileName.textContent = data.name; // Обновляем имя
@@ -133,33 +142,38 @@ formElementEdit.addEventListener("submit", handleEditProfileSubmit);
 function handleNewPlaceSubmit(evt) {
   evt.preventDefault();
 
-  // Получаем значения из полей ввода
-  const placeNameValue = placeName.value; // Название места
-  const linkInputValue = linkInput.value; // Ссылка на изображение
+  const placeNameValue = placeName.value; 
+  const linkInputValue = linkInput.value; 
 
-  // Вызов функции добавления новой карточки
-  addingNewCard(placeNameValue, linkInputValue) 
+  addingNewCard(placeNameValue, linkInputValue)
     .then(data => {
+      const ownerId = data.owner ? data.owner._id : userData._id;
+
       const newCardElement = createCard(
         {
-          name: data.name, // Используем данные, которые приходят с сервера
+          name: data.name,
           link: data.link,
+          likes: data.likes || [], 
+          _id: data._id, 
+          owner: data.owner || { _id: ownerId }
         },
-        deleteCard,
-        likeCard,
-        openPopupImage
+        ownerId
       );
 
-      // Добавляем карточку в начало списка
+      // Добавьте обработчик клика для новой карточки
+      const imageCard = newCardElement.querySelector(".card__image");
+      imageCard.addEventListener("click", () => {
+        openPopupImage(data.link, data.name, data.name);
+      });
+
       placesList.prepend(newCardElement);
 
-      // Закрываем попап и сбрасываем форму
       closePopup(addPopup);
       formElementAdd.reset();
-      resetValidationErrors(formElementAdd, buttonElementAdd); // Сбрасываем валидацию
+      resetValidationErrors(formElementAdd, buttonElementAdd);
     })
     .catch(err => {
-      console.error("Ошибка добавления карточки:", err); // Обработка ошибок
+      console.error("Ошибка добавления карточки:", err);
     });
 }
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
