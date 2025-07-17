@@ -1,4 +1,4 @@
-export {loadUserInfo, getCards, editingProfile, addingNewCard, toggleLike, deleteCard};
+export {loadUserInfo, getCards, editingProfile, addingNewCard, toggleLike, deleteCard, updateAvatar};
 
 const MYTOKEN = 'e4c415db-c6a6-4869-b720-3932e0cc453d';
 
@@ -113,7 +113,25 @@ function deleteCard(cardId) {
     if (!res.ok) {
       throw new Error(`Ошибка: ${res.status}`);
     }
+    return res.json();
   });
 };
 
 
+// обновление аватара
+function updateAvatar(avatar) {
+  return fetch('https://nomoreparties.co/v1/wff-cohort-42/users/me/avatar', {
+    method: 'PATCH',
+    headers: {
+      authorization: MYTOKEN,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ avatar }) // Отправляем JSON с новыми данными аватара
+  })
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`Ошибка: ${res.status}`);
+    }
+    return res.json();
+  });
+}

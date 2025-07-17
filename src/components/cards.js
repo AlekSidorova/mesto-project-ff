@@ -50,7 +50,7 @@ function createCard(initialCard, userId) {
 
   // Обработчик для кнопки удаления карточки
   deleteButton.addEventListener("click", () => {
-    if (confirm("Вы точно хотите удалить эту карточку?")) {
+    if (confirm("Вы уверены?")) {
       openDeleteCardPopup(initialCard._id, elementCard);
     }
   });

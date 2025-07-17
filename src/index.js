@@ -1,9 +1,9 @@
 import "./index.css";
 
-import { createCard, openDeleteCardPopup } from "./components/cards.js";
+import { createCard } from "./components/cards.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
 import { enableValidation, resetValidationErrors, clearValidation } from "./components/validation.js";
-import { loadUserInfo, getCards, editingProfile, addingNewCard } from "./components/api.js"
+import { loadUserInfo, getCards, editingProfile, addingNewCard, updateAvatar } from "./components/api.js"
 
 const placesList = document.querySelector(".places__list");
 
