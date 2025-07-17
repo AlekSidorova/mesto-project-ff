@@ -125,12 +125,12 @@ function updateAvatar(avatar) {
       authorization: MYTOKEN,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ avatar: avatar }) // Отправляем JSON с новыми данными аватара
+    body: JSON.stringify({ avatar: avatar })
   })
   .then(res => {
     if (!res.ok) {
       return res.text().then(text => {
-        throw new Error(`Ошибка: ${res.status}, ${text}`); // Логируем текст ошибки
+        throw new Error(`Ошибка: ${res.status}, ${text}`);
       });
     }
     return res.json();

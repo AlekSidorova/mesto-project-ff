@@ -184,6 +184,8 @@ function handleNewPlaceSubmit(evt) {
 }
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 
+
+
 // Обработчик клика по аватару
 profileImageContainer.addEventListener('click', () => {
   openPopup(avatarPopup);
@@ -192,7 +194,7 @@ profileImageContainer.addEventListener('click', () => {
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__button',
     inactiveButtonClass: 'popup__button_disabled'
-  }); 
+  });
   formElementAvatar.reset();
 });
 
@@ -202,16 +204,31 @@ formElementAvatar.addEventListener('submit', (evt) => {
 
   const newAvatarUrl = urlInput.value; 
   
-  // Вызов функции обновления аватара из api.js
+  // Обновление аватара
   updateAvatar(newAvatarUrl)
     .then(data => {
-      document.querySelector('.profile__image').style.backgroundImage = `url(${data.avatar})`; // Обновляем аватар на странице
+      // Успешное обновление, обновляем аватар в интерфейсе
+      document.querySelector('.profile__image').style.backgroundImage = `url(${data.avatar})`;
       closePopup(avatarPopup); // Закрываем попап
     })
     .catch(err => {
-      console.error("Ошибка обновления аватара:", err); // Обработка ошибо
+      console.error("Ошибка обновления аватара:", err);
     });
+});
 
+// Загрузка данных пользователя при инициализации
+document.addEventListener('DOMContentLoaded', () => {
+  loadUserInfo()
+    .then(data => {
+      // Обновляем аватар на странице
+      document.querySelector('.profile__image').style.backgroundImage = `url(${data.avatar})`;
+      // При необходимости можете обновить другие поля
+      document.querySelector('.profile__name').textContent = data.name; 
+      document.querySelector('.profile__about').textContent = data.about; 
+    })
+    .catch(err => {
+      console.error("Ошибка загрузки информации о пользователе:", err);
+    });
 });
 
 
