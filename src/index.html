@@ -22,7 +22,6 @@
           <div class="profile__edit-icon"></div>
         </div>
 
-
         <div class="profile__info">
           <h1 class="profile__title">Жак-Ив Кусто</h1>
           <button class="profile__edit-button" type="button"></button>
@@ -88,42 +87,37 @@
     </div>
 
     <!-- попап редактирования аватара -->
-    <div class="popup popup_is-animated popup_type_edit__avatar">
-      <div class="popup__content">
+    <div class="popup popup_is-animated popup_type_avatar">
+      <div class="popup__content popup__content__avatar">
         <button type="button" class="popup__close"></button>
-        <h3 class="popup__title">Редактировать профиль</h3>
+        <h3 class="popup__title">Обновить аватар</h3>
 
-        <form class="popup__form" name="edit-profile" novalidate>
-          <input id="name-input" type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя"
-            data-error-empty="Вы пропустили это поле." required minlength="2" maxlength="40">
-          <span class="name-input-error hidden"></span>
-
-          <input id="description-input" type="text" name="description"
-            class="popup__input popup__input_type_description" placeholder="Занятие"
-            data-error-empty="Вы пропустили это поле." required minlength="2" maxlength="200">
-          <span class="description-input-error hidden"></span>
-
+        <form name="edit-avatar">
+          <input id="url-input" type="url" name="link" class="popup__input popup__input_type_url"
+            placeholder="Ссылка на картинку" data-error-empty="Введите ссылку на картинку." required>
+          <span class="url-input-error hidden"></span>
           <button type="submit" class="button popup__button">Сохранить</button>
         </form>
 
       </div>
-
-
     </div>
-    <template id="card-template">
-      <li class="places__item card">
-        <img class="card__image" src="" alt="" />
-        <button type="button" class="card__delete-button"></button>
-        <div class="card__description">
-          <h2 class="card__title">
-          </h2>
-          <div class="card__like">
-            <button type="button" class="card__like-button"></button>
-            <span class="card__like-count"></span> <!-- кол во лайков -->
-          </div>
+
+
+  </div>
+  <template id="card-template">
+    <li class="places__item card">
+      <img class="card__image" src="" alt="" />
+      <button type="button" class="card__delete-button"></button>
+      <div class="card__description">
+        <h2 class="card__title">
+        </h2>
+        <div class="card__like">
+          <button type="button" class="card__like-button"></button>
+          <span class="card__like-count"></span> <!-- кол во лайков -->
         </div>
-      </li>
-    </template>
+      </div>
+    </li>
+  </template>
 </body>
 
 </html>

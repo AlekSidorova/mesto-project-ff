@@ -33,6 +33,12 @@ const buttonElementAdd = formElementAdd.querySelector(".popup__button");
 
 let userData;
 
+// аватар
+const profileImageContainer = document.querySelector('.profile__image-container');
+const avatarPopup = document.querySelector('.popup_type_avatar');
+const urlInput = document.getElementById('url-input');
+const formElementAvatar = document.querySelector('form[name="edit-avatar"]');;
+
 // Функция для загрузки данных о пользователе и карточках
 const loadData = () => {
   Promise.all([loadUserInfo(), getCards()])
@@ -177,6 +183,31 @@ function handleNewPlaceSubmit(evt) {
     });
 }
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
+
+// Обработчик клика по контейнеру изображения
+profileImageContainer.addEventListener('click', () => {
+  // Открываем попап редактирования аватара
+  openPopup(avatarPopup);
+});
+
+// Обработчик отправки формы
+formElementAvatar.addEventListener('submit', (evt) => {
+  evt.preventDefault(); // Предотвращаем отправку формы
+
+  const newAvatarUrl = urlInput.value; // Получаем новый URL аватара
+  
+  // Вызов функции обновления аватара из api.js
+  updateAvatar(newAvatarUrl)
+    .then(data => {
+      document.querySelector('.profile__image').style.backgroundImage = `url(${data.avatar})`; // Обновляем аватар на странице
+      closePopup(avatarPopup); // Закрываем попап
+    })
+    .catch(err => {
+      console.error("Ошибка обновления аватара:", err); // Обработка ошибок
+    });
+});
+
+
 
 initializePopupCloseButtons();
 initializePopupClickOutside();
