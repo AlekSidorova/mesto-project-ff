@@ -1,138 +1,116 @@
-export {loadUserInfo, getCards, editingProfile, addingNewCard, toggleLike, deleteCard, updateAvatar};
+export { loadUserInfo, getCards, editingProfile, addingNewCard, toggleLike, deleteCard, updateAvatar };
 
-const MYTOKEN = 'e4c415db-c6a6-4869-b720-3932e0cc453d';
+const MY_TOKEN = 'e4c415db-c6a6-4869-b720-3932e0cc453d';
+const BASE_URL = 'https://nomoreparties.co/v1/wff-cohort-42';
 
-// инфо о пользователе 
+const headers = {
+  authorization: MY_TOKEN,
+  'Content-Type': 'application/json',
+};
+
+// Инфо о пользователе 
 const loadUserInfo = () => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-42/users/me`, {
+  return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
-    headers: {
-      authorization: MYTOKEN,
-      'Content-Type': 'application/json',
-    },
+    headers: headers,
   })
-  .then(res => {
-    if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
-    }
-    return res.json();
-  })
-  .then(data => {
-    return data; // Вернуть данные
-  });
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
 };
 
-
-// функция для загрузки карточек
-function getCards() {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-42/cards`, {
+// Функция для загрузки карточек
+const getCards = () => {
+  return fetch(`${BASE_URL}/cards`, {
     method: 'GET',
-    headers: {
-      authorization: MYTOKEN,
-      'Content-Type': 'application/json'
-    }
+    headers: headers,
   })
-  .then(res => {
-    if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
-    }
-    return res.json(); // Преобразование ответа в JSON
-  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
 };
 
-
-// функция редактирования профиля
-function editingProfile(name, about) {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-42/users/me', {
+// Функция редактирования профиля
+const editingProfile = (name, about) => {
+  return fetch(`${BASE_URL}/users/me`, {
     method: 'PATCH',
-    headers: {
-      authorization: MYTOKEN,
-      'Content-Type': 'application/json',
-    },
+    headers: headers,
     body: JSON.stringify({
-      name: name,  // передаем новое имя
-      about: about, // передаем новое описание
+      name: name,
+      about: about,
     }),
   })
-  .then(res => {
-    if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
-    }
-    return res.json(); // Преобразование ответа в JSON
-  });
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
 };
 
-
-// добавление новой карточки
-function addingNewCard(name, link) {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-42/cards', {
+// Добавление новой карточки
+const addingNewCard = (name, link) => {
+  return fetch(`${BASE_URL}/cards`, {
     method: 'POST',
-    headers: {
-      authorization: MYTOKEN,
-      'Content-Type': 'application/json',
-    },
+    headers: headers,
     body: JSON.stringify({
       name: name,
       link: link,
     }),
   })
-  .then(res => {
-    if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
-    }
-    return res.json(); // Возвращаем данные карточки
-  });
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
 };
 
 // Отображение количества лайков карточки + Постановка и снятие лайка
-function toggleLike(cardId, isLiked) {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-42/cards/likes/${cardId}`, {
-    method: isLiked ? 'PUT' : 'DELETE', 
-    headers: {
-      authorization: MYTOKEN,
-      'Content-Type': 'application/json',
-    },
+const toggleLike = (cardId, isLiked) => {
+  return fetch(`${BASE_URL}/cards/likes/${cardId}`, {
+    method: isLiked ? 'PUT' : 'DELETE',
+    headers: headers,
   })
-  .then(res => {
-    if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
-    }
-    return res.json();
-  });
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
 };
 
 // Функция для удаления карточки
-function deleteCard(cardId) {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-42/cards/${cardId}`, { // Используйте cardId
+const deleteCard = (cardId) => {
+  return fetch(`${BASE_URL}/cards/${cardId}`, {
     method: 'DELETE',
-    headers: {
-      authorization: MYTOKEN,
-    }
+    headers: headers,
   })
-  .then(res => {
-    if (!res.ok) {
-      throw new Error(`Ошибка: ${res.status}`);
-    }
-    return res.json();
-  });
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
 };
 
-// обновление аватара
-function updateAvatar(avatar) {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-42/users/me/avatar', {
+// Обновление аватара
+const updateAvatar = (avatar) => {
+  return fetch(`${BASE_URL}/users/me/avatar`, {
     method: 'PATCH',
-    headers: {
-      authorization: MYTOKEN,
-      'Content-Type': 'application/json',
-    },
+    headers: headers,
     body: JSON.stringify({ avatar: avatar })
   })
-  .then(res => {
-    if (!res.ok) {
-      return res.text().then(text => {
-        throw new Error(`Ошибка: ${res.status}, ${text}`);
-      });
-    }
-    return res.json();
-  });
-}
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
+};

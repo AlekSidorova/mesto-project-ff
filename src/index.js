@@ -19,24 +19,20 @@ const popupCaption = document.querySelector(".popup__caption");
 
 const formElementEdit = document.querySelector('form[name="edit-profile"]');
 const nameInput = formElementEdit.querySelector('input[name="name"]');
-const descriptionInput = formElementEdit.querySelector(
-  'input[name="description"]'
-);
-const profileName = document.querySelector(".profile__title"); // Элемент для имени профиля
-const profileDescription = document.querySelector(".profile__description"); // Элемент для занятия
+const descriptionInput = formElementEdit.querySelector('input[name="description"]');
+
+const profileName = document.querySelector(".profile__title"); 
+const profileDescription = document.querySelector(".profile__description"); 
 const buttonElementEdit = formElementEdit.querySelector(".popup__button");
 
-const formElementAdd = document.querySelector('form[name="new-place"]'); // сама форма
-const placeName = formElementAdd.querySelector('input[name="place-name"]'); // "Название"
-const linkInput = formElementAdd.querySelector('input[name="link"]'); // "Ссылка на картинку"
+const formElementAdd = document.querySelector('form[name="new-place"]'); 
+const placeName = formElementAdd.querySelector('input[name="place-name"]'); 
+const linkInput = formElementAdd.querySelector('input[name="link"]'); 
 const buttonElementAdd = formElementAdd.querySelector(".popup__button");
 
-let userData;
-
-// аватар
 const profileImageContainer = document.querySelector('.profile__image-container');
 const avatarPopup = document.querySelector('.popup_type_avatar');
-const urlInput = document.getElementById('avatar-url-input'); 
+const urlInput = document.getElementById('avatar-url-input');
 const formElementAvatar = document.querySelector('form[name="edit-avatar"]');
 const buttonElementAvatar = formElementAvatar.querySelector(".popup__button");
 
@@ -48,12 +44,10 @@ const loadData = () => {
         throw new Error("Не удалось загрузить данные пользователя или карточки.");
       }
 
-      // Устанавливаем данные пользователя на странице
       profileName.textContent = userData.name;
       profileDescription.textContent = userData.about;
       document.querySelector('.profile__image').src = userData.avatar;
 
-      // Перебираем массив карточек и отображаем их
       cards.forEach(card => {
         const cardElement = createCard(
           {
@@ -61,12 +55,11 @@ const loadData = () => {
             link: card.link,
             likes: card.likes,
             _id: card._id,
-            owner: card.owner 
+            owner: card.owner
           },
           userData._id
         );
-        
-        // Добавляем обработчик для открытия попапа
+
         const imageCard = cardElement.querySelector(".card__image");
         imageCard.addEventListener("click", () => {
           openPopupImage(card.link, card.name, card.name);
@@ -80,11 +73,11 @@ const loadData = () => {
     });
 };
 
-// открытие попапа с изображением
+// Открытие попапа с изображением
 function openPopupImage(imageSrc, imageAlt, caption) {
-  popupImage.src = imageSrc; // src для изображения
-  popupImage.alt = imageAlt; // alt
-  popupCaption.textContent = caption; // подпись
+  popupImage.src = imageSrc; 
+  popupImage.alt = imageAlt;
+  popupCaption.textContent = caption; 
 
   openPopup(imagePopup);
 }
@@ -99,50 +92,46 @@ openAddPopupButton.addEventListener("click", () => {
     inactiveButtonClass: 'popup__button_disabled'
   });
 
-  buttonElementAdd.disabled = true; // Делаем кнопку неактивной
-  buttonElementAdd.classList.add('popup__button_disabled'); // Добавляем класс для визуального эффекта
-
   openPopup(addPopup);
 });
 
 // Открытие попапа редактирования профиля
 openEditPopupButton.addEventListener("click", () => {
-  nameInput.value = profileName.textContent; // заполняем поле "Имя"
-  descriptionInput.value = profileDescription.textContent; // заполняем поле "Занятие"
+  nameInput.value = profileName.textContent; 
+  descriptionInput.value = profileDescription.textContent; 
   clearValidation(formElementEdit, {
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__button',
     inactiveButtonClass: 'popup__button_disabled',
   });
 
-  buttonElementEdit.disabled = false; // Делаем кнопку активной
-  buttonElementEdit.classList.remove('popup__button_disabled'); // Убираем класс для визуального эффекта
+  buttonElementEdit.disabled = false; 
+  buttonElementEdit.classList.remove('popup__button_disabled');
 
   openPopup(editPopup);
 });
-
 
 // Обработчик «отправки» формы редактирования профиля
 function handleEditProfileSubmit(evt) {
   evt.preventDefault();
 
-  buttonElementEdit.textContent = "Сохранение..."; // Изменяем текст кнопки на "Сохранение..."
+  buttonElementEdit.textContent = "Сохранение..."; 
 
-  const newName = nameInput.value; 
-  const newAbout = descriptionInput.value; 
+  const newName = nameInput.value;
+  const newAbout = descriptionInput.value;
 
   editingProfile(newName, newAbout)
     .then(data => {
-      profileName.textContent = data.name; 
-      profileDescription.textContent = data.about; 
-      document.querySelector('.profile__image').src = data.avatar; 
+      profileName.textContent = data.name;
+      profileDescription.textContent = data.about;
+      document.querySelector('.profile__image').src = data.avatar;
 
-      closePopup(editPopup); 
-      buttonElementEdit.textContent = "Сохранить"; // Возвращаем текст кнопки
+      closePopup(editPopup);
+      buttonElementEdit.textContent = "Сохранить"; 
     })
     .catch(err => {
       console.error("Ошибка редактирования профиля:", err);
-      buttonElementEdit.textContent = "Сохранить"; // Возвращаем текст кнопки в случае ошибки
+      buttonElementEdit.textContent = "Сохранить"; 
     });
 }
 formElementEdit.addEventListener("submit", handleEditProfileSubmit);
@@ -151,10 +140,11 @@ formElementEdit.addEventListener("submit", handleEditProfileSubmit);
 function handleNewPlaceSubmit(evt) {
   evt.preventDefault();
 
-  buttonElementAdd.textContent = "Сохранение..."; // Изменяем текст кнопки на "Сохранение..."
+  buttonElementAdd.textContent = "Сохранение..."; 
 
-  const placeNameValue = placeName.value; 
-  const linkInputValue = linkInput.value; 
+  const placeNameValue = placeName.value;
+  const linkInputValue = linkInput.value;
+
 
   addingNewCard(placeNameValue, linkInputValue)
     .then(data => {
@@ -164,8 +154,8 @@ function handleNewPlaceSubmit(evt) {
         {
           name: data.name,
           link: data.link,
-          likes: data.likes || [], 
-          _id: data._id, 
+          likes: data.likes || [],
+          _id: data._id,
           owner: data.owner || { _id: ownerId }
         },
         ownerId
@@ -181,21 +171,19 @@ function handleNewPlaceSubmit(evt) {
       closePopup(addPopup);
       formElementAdd.reset();
       resetValidationErrors(formElementAdd, buttonElementAdd);
-      buttonElementAdd.textContent = "Сохранить"; // Возвращаем текст кнопки
+      buttonElementAdd.textContent = "Сохранить"; 
     })
     .catch(err => {
       console.error("Ошибка добавления карточки:", err);
-      buttonElementAdd.textContent = "Сохранить"; // Возвращаем текст кнопки в случае ошибки
+      buttonElementAdd.textContent = "Сохранить"; 
     });
 }
 formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 
-
-
 // Обработчик клика по аватару
 profileImageContainer.addEventListener('click', () => {
   openPopup(avatarPopup);
-  urlInput.value = ''; // Очищаем поле URL
+  urlInput.value = ''; 
   clearValidation(formElementAvatar, {
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__button',
@@ -206,40 +194,32 @@ profileImageContainer.addEventListener('click', () => {
 
 // Обработчик отправки формы
 formElementAvatar.addEventListener('submit', (evt) => {
-  evt.preventDefault(); 
+  evt.preventDefault();
 
-  buttonElementAvatar.textContent = "Сохранение..."; // Изменяем текст кнопки на "Сохранение..."
+  buttonElementAvatar.textContent = "Сохранение..."; 
 
-  const newAvatarUrl = urlInput.value; 
-  
+  const newAvatarUrl = urlInput.value;
+
   updateAvatar(newAvatarUrl)
     .then(data => {
       document.querySelector('.profile__image').style.backgroundImage = `url(${data.avatar})`;
-      closePopup(avatarPopup); 
-      buttonElementAvatar.textContent = "Сохранить"; // Возвращаем текст кнопки
+      closePopup(avatarPopup);
+      buttonElementAvatar.textContent = "Сохранить"; 
     })
     .catch(err => {
       console.error("Ошибка обновления аватара:", err);
-      buttonElementAvatar.textContent = "Сохранить"; // Возвращаем текст кнопки в случае ошибки
+      buttonElementAvatar.textContent = "Сохранить"; 
     });
 });
 
 // Загрузка данных пользователя при инициализации
-document.addEventListener('DOMContentLoaded', () => {
-  loadUserInfo()
-    .then(data => {
-      // Обновляем аватар на странице
-      document.querySelector('.profile__image').style.backgroundImage = `url(${data.avatar})`;
-      // При необходимости можете обновить другие поля
-      document.querySelector('.profile__name').textContent = data.name; 
-      document.querySelector('.profile__about').textContent = data.about; 
-    })
-    .catch(err => {
-      console.error("Ошибка загрузки информации о пользователе:", err);
-    });
-});
-
-
+loadUserInfo()
+  .then(data => {
+    document.querySelector('.profile__image').style.backgroundImage = `url(${data.avatar})`;
+  })
+  .catch(err => {
+    console.error("Ошибка загрузки информации о пользователе:", err);
+  });
 
 initializePopupCloseButtons();
 initializePopupClickOutside();
@@ -254,5 +234,4 @@ enableValidation({
 });
 
 
-// Вызов функции для загрузки информации
 loadData();

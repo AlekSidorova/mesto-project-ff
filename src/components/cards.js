@@ -56,20 +56,17 @@ function createCard(initialCard, userId) {
   });
 
   return elementCard;
-}
+};
 
 function openDeleteCardPopup(cardId, cardElement) {
-  // Выводим ID карточки в консоль для проверки
-  console.log("Удаляем карточку с ID:", cardId); 
-  
-  deleteCard(cardId) // Передаем cardId
+  deleteCard(cardId) 
     .then(() => {
-      cardElement.remove(); // Удаляем карточку из DOM после успешного удаления с сервера
+      cardElement.remove(); 
     })
     .catch(err => {
-      console.error("Ошибка удаления карточки:", err); // Логируем ошибку
-      alert("Не удалось удалить карточку. Попробуйте еще раз."); // Уведомление пользователя
+      console.error("Ошибка удаления карточки:", err); 
+      alert("Не удалось удалить карточку. Попробуйте еще раз."); 
     });
-}
+};
 
 

@@ -25,6 +25,7 @@
   left: 47px;
   z-index: 1; 
   display: none; 
+  cursor: pointer;
 }
 
 .profile__image-container::before {
@@ -34,6 +35,7 @@
   background-color: rgba(0, 0, 0, 0.8); 
   opacity: 0; 
   transition: opacity .3s;
+  cursor: pointer;
 }
 
 .profile__image-container:hover .profile__edit-icon {
@@ -42,6 +44,7 @@
 
 .profile__image-container:hover::before {
   opacity: 1; 
+
 }
 
 @media screen and (max-width: 740px) {

@@ -13,22 +13,22 @@ const isValid = (inputElement) => {
         if (!validPattern.test(inputElement.value)) {
             inputElement.setCustomValidity("Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы");
         } else {
-            inputElement.setCustomValidity(""); // Сбрасываем ошибку
+            inputElement.setCustomValidity(""); 
         }
     } 
     // Валидация для ссылки
     else if (inputElement.name === 'link') {
         if (!urlPattern.test(inputElement.value)) {
-            inputElement.setCustomValidity("Введите адрес сайта."); // Сообщение для некорректного URL
+            inputElement.setCustomValidity("Введите адрес сайта."); 
         } else {
-            inputElement.setCustomValidity(""); // Сбрасываем ошибку
+            inputElement.setCustomValidity(""); 
         }
     } 
     // Валидация для других полей
     else if (!validPattern.test(inputElement.value)) {
         inputElement.setCustomValidity("Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы");
     } else {
-        inputElement.setCustomValidity(""); // Сбрасываем ошибку
+        inputElement.setCustomValidity(""); 
     }
 };
 
@@ -100,7 +100,7 @@ const resetValidationErrors = (formElement, buttonElement) => {
     const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
     inputList.forEach(inputElement => {
         hideInputError(formElement, inputElement);
-        inputElement.setCustomValidity(""); // Сбрасываем все кастомные сообщения
+        inputElement.setCustomValidity("");
     });
     toggleSaveButton(inputList, buttonElement);
 };
