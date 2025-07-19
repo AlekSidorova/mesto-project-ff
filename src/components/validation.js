@@ -62,7 +62,7 @@ const enableValidation = ({ formSelector, inputSelector, submitButtonSelector, i
 
     formList.forEach((formElement) => {
         const buttonElement = formElement.querySelector(submitButtonSelector);
-        setEventListeners(formElement, buttonElement, inputSelector);
+        setEventListeners(formElement, buttonElement);
     });
 };
 
@@ -82,16 +82,6 @@ const toggleSaveButton = (inputList, buttonElement) => {
     }
 };
 
-// Универсальная функция для сброса ошибок валидации
-const resetValidationErrors = (formElement, buttonElement) => {
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-    inputList.forEach(inputElement => {
-        hideInputError(formElement, inputElement);
-        inputElement.setCustomValidity("");
-    });
-    toggleSaveButton(inputList, buttonElement);
-};
-
 const clearValidation = (formElement, { inputSelector, submitButtonSelector, inactiveButtonClass }) => {
     const buttonElement = formElement.querySelector(submitButtonSelector);
     const inputList = Array.from(formElement.querySelectorAll(inputSelector));
@@ -101,9 +91,8 @@ const clearValidation = (formElement, { inputSelector, submitButtonSelector, ina
         inputElement.setCustomValidity(""); 
     });
 
-    // Делаем кнопку неактивной
     buttonElement.disabled = true;
     buttonElement.classList.add(inactiveButtonClass);
 };
 
-export { enableValidation, resetValidationErrors, clearValidation };
+export { enableValidation, clearValidation };
