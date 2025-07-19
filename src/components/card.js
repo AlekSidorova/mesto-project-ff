@@ -1,4 +1,3 @@
-export { createCard, openDeleteCardPopup};
 import { toggleLike, deleteCard } from './api.js';
 
 
@@ -70,3 +69,4 @@ function openDeleteCardPopup(cardId, cardElement) {
 };
 
 
+export { createCard, openDeleteCardPopup};

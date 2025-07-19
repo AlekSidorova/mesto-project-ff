@@ -1,6 +1,3 @@
-export { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside };
-
-
 // функция для открытия попапа
 function openPopup(popup) {
   popup.classList.add("popup_is-opened");
@@ -33,7 +30,7 @@ function initializePopupCloseButtons() {
       closePopup(popup);
     });
   });
-}
+};
 
 // Закрытие попапа по клику вне его контента 
 function initializePopupClickOutside() {
@@ -42,4 +39,6 @@ function initializePopupClickOutside() {
       closePopup(evt.target);
     }
   });
-} 
+};
+
+export { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside };

@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { createCard } from "./components/cards.js";
+import { createCard } from "./components/card.js";
 import { openPopup, closePopup, initializePopupCloseButtons, initializePopupClickOutside } from "./components/modal.js";
 import { enableValidation, resetValidationErrors, clearValidation } from "./components/validation.js";
 import { loadUserInfo, getCards, editingProfile, addingNewCard, updateAvatar } from "./components/api.js"
