@@ -1,33 +1,20 @@
-export { enableValidation, resetValidationErrors, clearValidation };
-
 const isValid = (inputElement) => {
     const validPattern = /^[a-zA-Zа-яА-ЯёЁ0-9\s-]+$/;
-    const urlPattern = /^(https?:\/\/.+\..+)$/;
 
     // Проверка на обязательность поля
     if (inputElement.validity.valueMissing) {
-        inputElement.setCustomValidity(inputElement.dataset.errorEmpty);
+        inputElement.setCustomValidity(""); 
     } 
-    // Валидация для имени места
-    else if (inputElement.name === 'place-name') {
+    // Валидация по паттерну для текстовых и других полей
+    else if (inputElement.type === 'text' || inputElement.type !== 'url') {
         if (!validPattern.test(inputElement.value)) {
-            inputElement.setCustomValidity("Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы");
+            inputElement.setCustomValidity(inputElement.dataset.errorPattern); 
         } else {
             inputElement.setCustomValidity(""); 
         }
     } 
-    // Валидация для ссылки
-    else if (inputElement.name === 'link') {
-        if (!urlPattern.test(inputElement.value)) {
-            inputElement.setCustomValidity("Введите адрес сайта."); 
-        } else {
-            inputElement.setCustomValidity(""); 
-        }
-    } 
-    // Валидация для других полей
-    else if (!validPattern.test(inputElement.value)) {
-        inputElement.setCustomValidity("Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы");
-    } else {
+    // Пропускаем валидацию для URL
+    else {
         inputElement.setCustomValidity(""); 
     }
 };
@@ -118,3 +105,5 @@ const clearValidation = (formElement, { inputSelector, submitButtonSelector, ina
     buttonElement.disabled = true;
     buttonElement.classList.add(inactiveButtonClass);
 };
+
+export { enableValidation, resetValidationErrors, clearValidation };

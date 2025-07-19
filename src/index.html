@@ -46,12 +46,14 @@
 
         <form class="popup__form" name="edit-profile" novalidate>
           <input id="name-input" type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя"
-            data-error-empty="Вы пропустили это поле." required minlength="2" maxlength="40">
+            required minlength="2" maxlength="40" 
+            data-error-pattern="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
           <span class="name-input-error hidden"></span>
 
           <input id="description-input" type="text" name="description"
             class="popup__input popup__input_type_description" placeholder="Занятие"
-            data-error-empty="Вы пропустили это поле." required minlength="2" maxlength="200">
+            required minlength="2" maxlength="200" 
+            data-error-pattern="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
           <span class="description-input-error hidden"></span>
 
           <button type="submit" class="button popup__button">Сохранить</button>
@@ -66,11 +68,12 @@
 
         <form class="popup__form" name="new-place" novalidate>
           <input id="new-place-input" type="text" name="place-name" class="popup__input popup__input_type_card-name"
-            placeholder="Название" data-error-empty="Вы пропустили это поле." required minlength="2" maxlength="30">
+            placeholder="Название" required minlength="2" maxlength="30" 
+             data-error-pattern="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
           <span class="new-place-input-error hidden"></span>
 
           <input id="url-input" type="url" name="link" class="popup__input popup__input_type_url"
-            placeholder="Ссылка на картинку" data-error-empty="Введите адрес сайта." required>
+            placeholder="Ссылка на картинку" required>
           <span class="url-input-error hidden"></span>
 
           <button type="submit" class="button popup__button">Сохранить</button>
@@ -94,7 +97,7 @@
 
         <form class="popup__form" name="edit-avatar" novalidate>
           <input id="avatar-url-input" type="url" name="link" class="popup__input popup__input_type_url"
-            placeholder="Ссылка на картинку" data-error-empty="Введите ссылку на картинку." required>
+            placeholder="Ссылка на картинку" required>
           <span class="avatar-url-input-error"></span>
           <button type="submit" class="button popup__button">Сохранить</button>
         </form>
