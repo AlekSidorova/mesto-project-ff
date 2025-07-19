@@ -36,6 +36,15 @@ const urlInput = document.getElementById('avatar-url-input');
 const formElementAvatar = document.querySelector('form[name="edit-avatar"]');
 const buttonElementAvatar = formElementAvatar.querySelector(".popup__button");
 
+const config = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__input-error_active'
+};
+
 // Функция для загрузки данных о пользователе и карточках
 const loadData = () => {
   Promise.all([loadUserInfo(), getCards()])
@@ -84,31 +93,22 @@ function openPopupImage(imageSrc, imageAlt, caption) {
 
 // Открытие попапа добавления новой карточки
 openAddPopupButton.addEventListener("click", () => {
-  placeName.value = '';
-  linkInput.value = '';
-  clearValidation(formElementAdd, {
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled'
-  });
-
-  openPopup(addPopup);
+    placeName.value = '';
+    linkInput.value = '';
+    clearValidation(formElementAdd, config); // Передаем конфиг вместо создания нового объекта
+    openPopup(addPopup);
 });
 
 // Открытие попапа редактирования профиля
 openEditPopupButton.addEventListener("click", () => {
-  nameInput.value = profileName.textContent;
-  descriptionInput.value = profileDescription.textContent;
-  clearValidation(formElementEdit, {
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-  });
+    nameInput.value = profileName.textContent;
+    descriptionInput.value = profileDescription.textContent;
+    clearValidation(formElementEdit, config); // Здесь так же
 
-  buttonElementEdit.disabled = false;
-  buttonElementEdit.classList.remove('popup__button_disabled');
+    buttonElementEdit.disabled = false;
+    buttonElementEdit.classList.remove(config.inactiveButtonClass); // Используем config
 
-  openPopup(editPopup);
+    openPopup(editPopup);
 });
 
 // Обработчик «отправки» формы редактирования профиля
@@ -186,14 +186,10 @@ formElementAdd.addEventListener("submit", handleNewPlaceSubmit);
 
 // Обработчик клика по аватару
 profileImageContainer.addEventListener('click', () => {
-  openPopup(avatarPopup);
-  urlInput.value = '';
-  clearValidation(formElementAvatar, {
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled'
-  });
-  formElementAvatar.reset();
+    openPopup(avatarPopup);
+    urlInput.value = '';
+    clearValidation(formElementAvatar, config); // И здесь
+    formElementAvatar.reset();
 });
 
 // Обработчик отправки формы
@@ -228,14 +224,6 @@ loadUserInfo()
 initializePopupCloseButtons();
 initializePopupClickOutside();
 
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__input-error_active'
-});
-
+enableValidation(config);
 
 loadData();
