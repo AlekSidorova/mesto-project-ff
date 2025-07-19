@@ -1,7 +1,7 @@
 import { toggleLike, deleteCard } from './api.js';
 
 
-function createCard(initialCard, userId) {
+function createCard(initialCard, userId, imageClickCallback) {
   const cardTemplate = document.querySelector("#card-template");
   const elementCard = cardTemplate.content.querySelector(".card").cloneNode(true);
 
@@ -27,6 +27,11 @@ function createCard(initialCard, userId) {
   // Скрываем кнопку удаления, если карточка не ваша
   deleteButton.style.display = (initialCard.owner._id === userId) ? 'block' : 'none';
 
+  // Устанавливаем обработчик при переданном колбэке
+  if (imageClickCallback) {
+    imageCard.addEventListener("click", imageClickCallback);
+  }
+
   // Обработчик события для лайка карточки
   likeButton.addEventListener("click", () => {
     const isCurrentlyLiked = likeButton.classList.contains("card__like-button_is-active");
@@ -36,11 +41,7 @@ function createCard(initialCard, userId) {
         likeCount.textContent = updatedCard.likes.length; 
 
         // Смена цвета сердечка
-        if (isCurrentlyLiked) {
-          likeButton.classList.remove("card__like-button_is-active"); // Убираем активный класс
-        } else {
-          likeButton.classList.add("card__like-button_is-active"); // Добавляем активный класс
-        }
+        likeButton.classList.toggle("card__like-button_is-active", !isCurrentlyLiked);
       })
       .catch(err => {
         console.error("Ошибка при обработке лайка:", err);
