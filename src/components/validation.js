@@ -52,12 +52,11 @@ const setEventListeners = (formElement, buttonElement, config) => {
 };
 
 const enableValidation = (config) => {
-    console.log("Конфигурация валидации:", config); // Логируем конфигурацию
     const formList = Array.from(document.querySelectorAll(config.formSelector));
 
     formList.forEach((formElement) => {
         const buttonElement = formElement.querySelector(config.submitButtonSelector);
-        setEventListeners(formElement, buttonElement, config); // Передаем config сюда
+        setEventListeners(formElement, buttonElement, config); 
     });
 };
 
@@ -66,14 +65,25 @@ const hasInvalidInput = (inputList) => {
     return inputList.some((inputElement) => !inputElement.validity.valid);
 };
 
+// кнопка "Отправить"
+const disableSubmitButton = (buttonElement, config) => {
+    buttonElement.disabled = true; 
+    buttonElement.classList.add(config.inactiveButtonClass);
+};
+
+// аналогичная логика для включения кнопки
+const enableSubmitButton = (buttonElement, config) => {
+    buttonElement.disabled = false; 
+    buttonElement.classList.remove(config.inactiveButtonClass);
+};
+
 // Управление состоянием кнопки "Сохранить"
 const toggleSaveButton = (inputList, buttonElement, config) => {
     if (hasInvalidInput(inputList)) {
         buttonElement.disabled = true;
         buttonElement.classList.add(config.inactiveButtonClass);
     } else {
-        buttonElement.disabled = false;
-        buttonElement.classList.remove(config.inactiveButtonClass);
+        enableSubmitButton(buttonElement, config);
     }
 };
 
@@ -82,15 +92,12 @@ const clearValidation = (formElement, config) => {
     const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
 
     inputList.forEach(inputElement => {
-        // Удаляем ошибки
         handleInputError(formElement, inputElement, '', config, false);
         
-        // Сбрасываем кастомную валидацию
         inputElement.setCustomValidity("");
     });
 
-    buttonElement.disabled = true;
-    buttonElement.classList.add(config.inactiveButtonClass);
+    disableSubmitButton(buttonElement, config);
 };
 
 export { enableValidation, clearValidation };
