@@ -1,4 +1,4 @@
-# Проектная работа Mesto
+# Mesto
 
 ![Project Screenshot](/src/images/screenshot__main.png)
 
@@ -34,6 +34,4 @@ Mesto — учебное веб-приложение, в котором реал
 - модульная организация JavaScript-кода
 
 ## Репозиторий
- https://github.com/aleksidorova/mesto-project-ff.git
-
-
+[Mesto](https://github.com/AlekSidorova/mesto-project-ff)
